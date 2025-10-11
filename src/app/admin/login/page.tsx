@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/layout/logo';
+import { Logo } from '@/components/ui/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {

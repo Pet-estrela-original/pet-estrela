@@ -9,7 +9,7 @@ import * as React from 'react';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
-import { Logo } from "./logo";
+import { Logo } from "@/components/ui/logo";
 
 const navLinks = [
   { href: "/", label: "Home" },
