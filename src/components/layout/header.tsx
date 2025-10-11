@@ -8,7 +8,7 @@ import * as React from 'react';
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Logo } from "@/components/ui/logo";
 
 const navLinks = [
@@ -82,6 +82,10 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full">
+              <SheetHeader className="sr-only">
+                  <SheetTitle>Menu Principal</SheetTitle>
+                  <SheetDescription>Navegue pelas seções do site.</SheetDescription>
+              </SheetHeader>
               <div className="flex flex-col h-full p-4">
                 <div className="flex justify-between items-center mb-8">
                   <Logo />
