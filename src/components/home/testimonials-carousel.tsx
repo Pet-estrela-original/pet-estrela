@@ -50,6 +50,7 @@ export function TestimonialsCarousel() {
                                                         alt={testimonial.name}
                                                         data-ai-hint={testimonialImage.imageHint}
                                                         fill
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                         className="object-cover object-top"
                                                     />
                                                 </div>
@@ -77,4 +78,3 @@ export function TestimonialsCarousel() {
         </section>
     );
 }
-
