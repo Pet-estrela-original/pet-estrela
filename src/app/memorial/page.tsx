@@ -6,13 +6,13 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Dog, Cat, Calendar, Heart, User, Venus, Mars, TreePine, Hash } from 'lucide-react';
+import { Search, Dog, Cat } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 
 type PetProfile = {
   id: string;
@@ -107,11 +107,11 @@ export default function MemorialPage() {
                 const matchesSearch = 
                     pet.name.toLowerCase().includes(searchTermLower) ||
                     pet.memorialCode.toLowerCase().includes(searchTermLower) ||
-                    pet.breed.toLowerCase().includes(searchTermLower) ||
-                    pet.tutors.toLowerCase().includes(searchTermLower) ||
+                    (pet.breed && pet.breed.toLowerCase().includes(searchTermLower)) ||
+                    (pet.tutors && pet.tutors.toLowerCase().includes(searchTermLower)) ||
                     cremationDate.toLowerCase().includes(searchTermLower);
 
-                const matchesAnimal = animalFilter === 'all' || pet.animalType.toLowerCase() === animalFilter.toLowerCase();
+                const matchesAnimal = animalFilter === 'all' || (pet.animalType && pet.animalType.toLowerCase() === animalFilter.toLowerCase());
                 
                 return matchesSearch && matchesAnimal;
             })
@@ -163,7 +163,7 @@ export default function MemorialPage() {
                 />
                 <div className="absolute inset-0 bg-black/50" />
                 <div className="relative container mx-auto max-w-7xl px-4 z-10">
-                    <h1 className="font-headline text-3xl md:text-5xl font-bold drop-shadow-md">Memorial Pet Estrela</h1>
+                    <h1 className="font-headline text-3xl md:text-4xl lg:text-5xl font-bold drop-shadow-md">Memorial Pet Estrela</h1>
                     <p className="mt-4 text-sm md:text-base leading-relaxed max-w-3xl mx-auto drop-shadow-md">
                         O Memorial Pet Estrela foi criado como uma forma carinhosa de eternizar a lembrança dos nossos animais que se tornaram estrelinhas. Aqui, cada vida é celebrada através do plantio de uma árvore, que simboliza amor, renovação e memória eterna.  Além de homenagear nossos companheiros, este memorial também contribui para o reflorestamento, com mudas frutíferas e nativas, fortalecendo a natureza.  As cinzas de cada pet são depositadas junto à muda escolhida e recebem uma identificação única. Por meio do QR Code, é possível consultar essa numeração e acessar as informações sobre o animal e a árvore que guarda sua lembrança.
                     </p>
@@ -261,3 +261,4 @@ export default function MemorialPage() {
             </section>
         </div>
     );
+}
