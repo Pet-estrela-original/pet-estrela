@@ -66,11 +66,11 @@ export function AllPets() {
                                             <div className="bg-primary/10 p-4 rounded-full mb-3 transition-colors">
                                                 {pet.icon}
                                             </div>
-                                            <span className="font-semibold text-foreground">{pet.name}</span>
+                                            <span className="font-semibold text-foreground text-balance">{pet.name}</span>
                                         </div>
                                         {/* Back */}
                                         <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-primary text-primary-foreground rounded-lg p-4 [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                                             <p className="text-sm font-semibold">Atendimento especializado para {pet.name.toLowerCase()}</p>
+                                             <p className="text-sm font-semibold text-balance">Atendimento especializado para {pet.name.toLowerCase()}</p>
                                         </div>
                                     </Card>
                                 </div>
