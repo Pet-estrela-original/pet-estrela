@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter, User } from 'lucide-react';
+import { Facebook, Instagram, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
 
@@ -49,7 +49,6 @@ export function Footer() {
              <div className="flex items-center justify-center md:justify-start gap-4">
                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Facebook size={20} /></a>
                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Instagram size={20} /></a>
-                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Twitter size={20} /></a>
             </div>
           </div>
         </div>
