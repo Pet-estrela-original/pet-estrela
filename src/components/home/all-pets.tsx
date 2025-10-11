@@ -40,7 +40,7 @@ const petTypes = [
     { name: "Aves", icon: <Bird className="w-8 h-8 text-primary" /> },
     { name: "Roedores", icon: <Rabbit className="w-8 h-8 text-primary" /> },
     { name: "Répteis", icon: <Turtle className="w-8 h-8 text-primary" /> },
-    { name: "Cavalos", icon: <HorseIcon className="w-8 h-8 text-primary" /> },
+    { name: "Animais de grande porte", icon: <HorseIcon className="w-8 h-8 text-primary" /> },
 ];
 
 export function AllPets() {
@@ -104,4 +104,3 @@ export function AllPets() {
     );
 }
     
-
