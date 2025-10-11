@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Twitter, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
 
@@ -54,8 +54,12 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-16 border-t pt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-16 border-t pt-8 flex flex-col sm:flex-row justify-between items-center text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} Pet Estrela Crematório. Todos os direitos reservados.</p>
+          <Link href="/admin" className="mt-4 sm:mt-0 flex items-center gap-2 hover:text-primary transition-colors">
+            <User size={16} />
+            Área do Funcionário
+          </Link>
         </div>
       </div>
 
