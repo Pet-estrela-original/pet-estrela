@@ -51,13 +51,13 @@ export function AllPets() {
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="order-2 md:order-1">
-                        <h2 className="font-headline text-4xl font-bold text-primary mb-6">
+                        <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-6">
                             Acolhemos Todos os Tipos de Pets
                         </h2>
                         <p className="text-lg text-foreground/80 mb-8">
                             Nosso amor e respeito se estendem a todos os animais, não importa a espécie ou o porte. Estamos preparados para oferecer uma despedida digna a cada um deles.
                         </p>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
                             {petTypes.map((pet) => (
                                 <div key={pet.name} className="perspective">
                                      <Card className="relative aspect-square flex flex-col items-center justify-center p-4 text-center bg-white shadow-lg rounded-lg transition-all duration-700 [transform-style:preserve-3d] hover:[transform:rotateY(180deg)]">
@@ -76,7 +76,7 @@ export function AllPets() {
                                 </div>
                             ))}
                         </div>
-                         <div className="flex justify-end">
+                         <div className="flex justify-center md:justify-end">
                             <Button asChild size="lg" className="mt-8">
                                 <Link href={whatsappUrl} target="_blank">
                                     Saiba Mais
@@ -94,6 +94,7 @@ export function AllPets() {
                                     width={600}
                                     height={600}
                                     className="object-cover w-full h-full aspect-square"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                              }
                         </Card>
@@ -103,4 +104,3 @@ export function AllPets() {
         </section>
     );
 }
-    

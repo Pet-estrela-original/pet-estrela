@@ -46,7 +46,7 @@ export default function SobrePage() {
             {/* Mission Section */}
             <section className="py-20 lg:py-28 bg-white">
                 <div className="container mx-auto max-w-4xl px-4 text-center">
-                    <h2 className="font-headline text-4xl text-primary mb-6">Nossa Missão é Honrar a Memória</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl text-primary mb-6">Nossa Missão é Honrar a Memória</h2>
                     <div className="text-lg text-foreground/80 space-y-6 leading-relaxed max-w-3xl mx-auto">
                         <p>
                             O Pet Estrela Crematório nasceu de um sentimento profundo: a dor da perda de um companheiro fiel e o desejo de oferecer uma despedida que estivesse à altura de tanto amor e lealdade. A empresa foi fundada a partir da experiência de anos testemunhando a dificuldade dos tutores em encontrar um serviço de cremação que fosse ao mesmo tempo profissional, respeitoso e acolhedor.
@@ -61,7 +61,7 @@ export default function SobrePage() {
             {/* Values Section */}
             <section className="py-20 lg:py-28 bg-background">
                 <div className="container mx-auto max-w-7xl px-4 text-center">
-                    <h2 className="font-headline text-4xl text-primary mb-16">Nossos Valores</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl text-primary mb-16">Nossos Valores</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {values.map((value) => (
                            <Card key={value.title} className="text-center shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 bg-white p-8">
@@ -80,12 +80,12 @@ export default function SobrePage() {
              <section className="py-20 lg:py-28 bg-white">
                  <div className="container mx-auto max-w-4xl px-4 text-center">
                     <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-0 shadow-xl overflow-hidden">
-                        <CardContent className="p-12 relative">
-                             <PawPrint className="absolute top-4 left-6 h-20 w-20 text-primary/10 opacity-80" />
-                             <p className="font-headline text-3xl md:text-4xl text-primary/90 relative z-10">
+                        <CardContent className="p-8 md:p-12 relative">
+                             <PawPrint className="absolute top-4 left-6 h-12 w-12 md:h-20 md:w-20 text-primary/10 opacity-80" />
+                             <p className="font-headline text-2xl md:text-4xl text-primary/90 relative z-10">
                                 “O amor não conhece raça, espécie ou fim. Ele apenas se transforma.”
                             </p>
-                             <PawPrint className="absolute bottom-4 right-6 h-20 w-20 text-accent/10 opacity-80" />
+                             <PawPrint className="absolute bottom-4 right-6 h-12 w-12 md:h-20 md:w-20 text-accent/10 opacity-80" />
                         </CardContent>
                     </Card>
                 </div>
@@ -93,4 +93,3 @@ export default function SobrePage() {
         </div>
     );
 }
-

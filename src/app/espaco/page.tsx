@@ -23,6 +23,7 @@ export default function EspacoPage() {
                     alt="Recepção do crematório"
                     fill
                     className="object-cover"
+                    sizes="100vw"
                  />
                  <div className="absolute inset-0 bg-black/50" />
                  <div className="relative container mx-auto max-w-7xl h-full flex flex-col items-center justify-center text-center text-white p-4 z-10">
@@ -53,6 +54,7 @@ export default function EspacoPage() {
                                                 data-ai-hint={image.imageHint}
                                                 fill
                                                 className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                                                sizes="(max-width: 768px) 100vw, 50vw"
                                             />
                                         )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -89,4 +91,3 @@ export default function EspacoPage() {
         </div>
     );
 }
-

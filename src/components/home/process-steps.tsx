@@ -37,26 +37,26 @@ export function ProcessSteps() {
         <section className="py-20 lg:py-28 bg-white">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="text-center mb-16">
-                    <h2 className="font-headline text-4xl font-bold text-primary">Nosso Processo de Cremação</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Nosso Processo de Cremação</h2>
                     <p className="mt-4 text-lg text-foreground/80 max-w-3xl mx-auto">
                         Conduzimos cada etapa com máxima transparência, cuidado e seriedade.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-16 md:gap-8">
                     {steps.map((step, index) => (
                         <Card 
                             key={index} 
-                            className="group relative text-center border-2 border-transparent hover:border-primary/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 ease-in-out"
+                            className="group relative text-center border-2 border-transparent hover:border-primary/20 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 ease-in-out bg-card pt-10"
                         >
-                            <CardHeader className="items-center">
-                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-white px-4">
+                            <CardHeader className="items-center p-0">
+                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-background p-2 rounded-full">
                                      <div className="bg-primary/10 p-5 rounded-full transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20">
                                         {step.icon}
                                     </div>
                                 </div>
-                                <CardTitle className="font-headline text-2xl text-primary pt-10">{step.title}</CardTitle>
+                                <CardTitle className="font-headline text-2xl text-primary pt-4">{step.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="p-6">
                                 <CardDescription className="text-base min-h-[70px]">
                                     {step.description}
                                 </CardDescription>
@@ -71,5 +71,3 @@ export function ProcessSteps() {
         </section>
     );
 }
-    
-

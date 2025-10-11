@@ -55,6 +55,7 @@ const MediaItem = ({ src, alt }: { src: string, alt: string }) => {
             alt={alt}
             fill
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
         />
     );
 }
@@ -119,7 +120,7 @@ const PetProfilePage = () => {
                             <Skeleton className="h-5 w-2/3" />
                             <Separator />
                             <div className="grid grid-cols-2 gap-4">
-                                {[...Array(6)].map(i => <Skeleton key={i} className="h-8 w-full" />)}
+                                {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
                             </div>
                         </div>
                     </div>
@@ -130,7 +131,7 @@ const PetProfilePage = () => {
 
     if (!selectedPet) {
         return (
-            <div className="text-center py-20">
+            <div className="text-center py-20 px-4">
                 <h2 className="text-2xl font-bold text-primary">Memorial não encontrado</h2>
                 <p className="text-muted-foreground mt-2">O código do memorial informado não corresponde a nenhum pet.</p>
                  <Button asChild className="mt-8">
@@ -141,7 +142,7 @@ const PetProfilePage = () => {
     }
     
     return (
-        <div className='bg-background min-h-screen py-12'>
+        <div className='bg-background min-h-screen py-8 md:py-12'>
             <div className="container mx-auto max-w-5xl px-4">
                  <div className="mb-8">
                     <Button asChild variant="outline">
@@ -165,12 +166,12 @@ const PetProfilePage = () => {
                                     ))}
                                 </CarouselContent>
                                  {(selectedPet.imageUrls?.length || 0) > 1 && <>
-                                    <CarouselPrevious className="left-4"/>
-                                    <CarouselNext className="right-4"/>
+                                    <CarouselPrevious className="left-2 md:left-4"/>
+                                    <CarouselNext className="right-2 md:right-4"/>
                                  </>}
                             </Carousel>
                         </div>
-                        <div className="p-8 flex flex-col bg-white">
+                        <div className="p-6 md:p-8 flex flex-col bg-white">
                             <header className="text-left mb-6">
                                 <h1 className="font-headline text-4xl md:text-5xl text-primary mb-2">{selectedPet.name}</h1>
                                 <p className='italic text-muted-foreground'>
@@ -201,4 +202,3 @@ const PetProfilePage = () => {
 
 
 export default PetProfilePage;
-
