@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -13,8 +14,8 @@ import { Logo } from '@/components/layout/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('crematoriopetestrela@gmail.com');
-  const [password, setPassword] = useState('CR3MATORIO_2025_@2025');
+  const [email, setEmail] = useState('crematorioestrela@gmail.com');
+  const [password, setPassword] = useState('Pet-estrela-original');
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = useFirebase();
   const router = useRouter();
