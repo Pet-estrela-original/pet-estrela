@@ -9,7 +9,8 @@ export const Logo = () => (
                 src="https://i.imgur.com/blBpKxs.png" 
                 alt="Pet Estrela Crematório Logo" 
                 fill
-                className="object-contain drop-shadow-sm"
+                className="object-contain"
+                sizes="140px"
                 priority 
             />
         </div>
