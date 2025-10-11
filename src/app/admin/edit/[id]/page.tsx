@@ -7,7 +7,6 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, getDoc, setDoc, addDoc, deleteDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useFirebase } from '@/firebase/provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +21,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 
 const imageSchema = z.union([
-  z.string().url().optional(), // For existing URLs
+  z.string().optional(), // For existing URLs or data URIs
   z.any().refine(file => file instanceof File, "Arquivo de imagem é obrigatório").optional(),
 ]);
 
@@ -55,7 +54,7 @@ const fileToDataUrl = (file: File): Promise<string> => {
 
 const EditPetPage = () => {
     const { id } = useParams();
-    const { firestore, storage } = useFirebase();
+    const { firestore } = useFirebase(); // Removed 'storage'
     const router = useRouter();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
@@ -148,17 +147,8 @@ const EditPetPage = () => {
         fetchPet();
     }, [id, firestore, form, router, toast, isNew]);
 
-    const uploadImage = async (imageFile: File) => {
-        if (!storage) throw new Error("Serviço de storage não encontrado.");
-        
-        const fileRef = ref(storage, `pet_images/${id || Date.now()}/${imageFile.name}`);
-        await uploadBytes(fileRef, imageFile);
-        const downloadUrl = await getDownloadURL(fileRef);
-        return downloadUrl;
-    };
-
     const onSubmit = async (data: PetFormValues) => {
-        if (!firestore || !storage) return;
+        if (!firestore) return;
         setIsSaving(true);
         
         try {
@@ -167,45 +157,27 @@ const EditPetPage = () => {
             if (data.images) {
                 for (const imageField of data.images) {
                     if (imageField.value instanceof File) {
-                        const newUrl = await uploadImage(imageField.value);
-                        imageUrls.push(newUrl);
-                    } else if (typeof imageField.value === 'string' && imageField.value.startsWith('http')) {
+                        const dataUrl = await fileToDataUrl(imageField.value);
+                        imageUrls.push(dataUrl);
+                    } else if (typeof imageField.value === 'string' && imageField.value) {
+                        // Keep existing URL (could be http or data: URL)
                         imageUrls.push(imageField.value);
                     }
                 }
-            }
-
-            if (imageUrls.length === 0) {
-                 imageUrls.push(`https://picsum.photos/seed/${Date.now()}/600/600`);
             }
             
             const processedData = {
                 ...data,
                 birthDate: data.birthDate ? new Date(data.birthDate) : null,
                 cremationDate: data.cremationDate ? new Date(data.cremationDate) : null,
-                imageUrls,
-                images: undefined,
+                imageUrls, // Save the array of data URIs
+                images: undefined, // Remove the form-specific images field
                 updatedAt: serverTimestamp(),
             };
-
+            
             if (isNew) {
                 const newData = { ...processedData, createdAt: serverTimestamp() };
-                const docRef = await addDoc(collection(firestore, 'pet_profiles'), newData);
-                
-                if (data.images?.some(img => img.value instanceof File)) {
-                    const finalUrls: string[] = [];
-                    for(const image of data.images) {
-                        if(image.value instanceof File) {
-                             const storageRef = ref(storage, `pet_images/${docRef.id}/${image.value.name}`);
-                             await uploadBytes(storageRef, image.value);
-                             const url = await getDownloadURL(storageRef);
-                             finalUrls.push(url);
-                        } else if(typeof image.value === 'string' && image.value) {
-                            finalUrls.push(image.value);
-                        }
-                    }
-                    await setDoc(docRef, {imageUrls: finalUrls}, {merge: true});
-                }
+                await addDoc(collection(firestore, 'pet_profiles'), newData);
                 toast({ title: 'Sucesso!', description: 'Novo memorial criado.' });
             } else {
                 const docRef = doc(firestore, 'pet_profiles', id as string);
