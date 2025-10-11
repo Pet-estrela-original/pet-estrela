@@ -19,7 +19,7 @@ export default function EspacoPage() {
             {/* Hero Section */}
             <section className="relative h-[40vh] min-h-[300px] bg-cover bg-center">
                  <Image
-                    src="https://i.imgur.com/W616oG4.jpeg"
+                    src="https://i.imgur.com/sf3kzUS.jpeg"
                     alt="Recepção do crematório"
                     fill
                     className="object-cover"
