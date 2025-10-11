@@ -3,10 +3,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, getDoc, setDoc, addDoc, deleteDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useFirebase } from '@/firebase/provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,11 @@ import AuthGuard from '@/app/admin/AuthGuard';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 
+const imageSchema = z.union([
+  z.string().url().optional(), // For existing URLs
+  z.any().refine(file => file instanceof File, "Arquivo de imagem é obrigatório").optional(),
+]);
+
 const formSchema = z.object({
   name: z.string().optional(),
   memorialCode: z.string().optional(),
@@ -32,18 +38,29 @@ const formSchema = z.object({
   tree: z.string().optional(),
   shortDescription: z.string().optional(),
   fullDescription: z.string().optional(),
-  images: z.array(z.object({ value: z.any() })).optional(),
+  images: z.array(z.object({ value: imageSchema })).optional(),
 });
 
 type PetFormValues = z.infer<typeof formSchema>;
 
+// Helper function to convert file to data URL
+const fileToDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+};
+
 const EditPetPage = () => {
     const { id } = useParams();
-    const { firestore } = useFirebase();
+    const { firestore, storage } = useFirebase();
     const router = useRouter();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [imagePreviews, setImagePreviews] = useState<(string | null)[]>([]);
 
     const isNew = id === 'new';
 
@@ -61,7 +78,7 @@ const EditPetPage = () => {
             tree: '',
             shortDescription: '',
             fullDescription: '',
-            images: [{ value: '' }],
+            images: [{ value: undefined }],
         },
     });
     
@@ -71,6 +88,30 @@ const EditPetPage = () => {
     });
 
     const watchedImages = form.watch("images");
+
+     useEffect(() => {
+        const previews = (watchedImages || []).map(field => {
+             if (field.value instanceof File) {
+                return URL.createObjectURL(field.value);
+            }
+            if (typeof field.value === 'string') {
+                return field.value;
+            }
+            return null;
+        });
+
+        setImagePreviews(previews);
+
+        // Cleanup object URLs on unmount
+        return () => {
+            previews.forEach(url => {
+                if (url && url.startsWith('blob:')) {
+                    URL.revokeObjectURL(url);
+                }
+            });
+        };
+    }, [watchedImages]);
+
 
     useEffect(() => {
         if (!firestore || isNew) {
@@ -91,7 +132,7 @@ const EditPetPage = () => {
                         ...data,
                         birthDate,
                         cremationDate,
-                        images: data.imageUrls?.map((url: string) => ({ value: url })) || [{value: ''}]
+                        images: data.imageUrls?.map((url: string) => ({ value: url })) || [{value: undefined}]
                     });
                 } else {
                     toast({ variant: 'destructive', title: 'Erro', description: 'Memorial não encontrado.' });
@@ -107,35 +148,71 @@ const EditPetPage = () => {
         fetchPet();
     }, [id, firestore, form, router, toast, isNew]);
 
+    const uploadImage = async (imageFile: File) => {
+        if (!storage) throw new Error("Serviço de storage não encontrado.");
+        
+        const fileRef = ref(storage, `pet_images/${id || Date.now()}/${imageFile.name}`);
+        await uploadBytes(fileRef, imageFile);
+        const downloadUrl = await getDownloadURL(fileRef);
+        return downloadUrl;
+    };
+
     const onSubmit = async (data: PetFormValues) => {
-        if (!firestore) return;
+        if (!firestore || !storage) return;
         setIsSaving(true);
         
         try {
-            // Use a placeholder image if no image is provided
-            const imageUrls = (data.images && data.images.some(img => typeof img.value === 'string' && img.value.startsWith('http')))
-                ? data.images.map(img => img.value).filter(v => typeof v === 'string' && v.startsWith('http'))
-                : [`https://picsum.photos/seed/${Date.now()}/600/600`];
+            const imageUrls: string[] = [];
 
+            if (data.images) {
+                for (const imageField of data.images) {
+                    if (imageField.value instanceof File) {
+                        const newUrl = await uploadImage(imageField.value);
+                        imageUrls.push(newUrl);
+                    } else if (typeof imageField.value === 'string' && imageField.value.startsWith('http')) {
+                        imageUrls.push(imageField.value);
+                    }
+                }
+            }
 
+            if (imageUrls.length === 0) {
+                 imageUrls.push(`https://picsum.photos/seed/${Date.now()}/600/600`);
+            }
+            
             const processedData = {
                 ...data,
                 birthDate: data.birthDate ? new Date(data.birthDate) : null,
                 cremationDate: data.cremationDate ? new Date(data.cremationDate) : null,
                 imageUrls,
-                images: undefined, // Remove 'images' para não ser salvo no Firestore
+                images: undefined,
                 updatedAt: serverTimestamp(),
             };
 
             if (isNew) {
                 const newData = { ...processedData, createdAt: serverTimestamp() };
-                await addDoc(collection(firestore, 'pet_profiles'), newData);
+                const docRef = await addDoc(collection(firestore, 'pet_profiles'), newData);
+                
+                if (data.images?.some(img => img.value instanceof File)) {
+                    const finalUrls: string[] = [];
+                    for(const image of data.images) {
+                        if(image.value instanceof File) {
+                             const storageRef = ref(storage, `pet_images/${docRef.id}/${image.value.name}`);
+                             await uploadBytes(storageRef, image.value);
+                             const url = await getDownloadURL(storageRef);
+                             finalUrls.push(url);
+                        } else if(typeof image.value === 'string' && image.value) {
+                            finalUrls.push(image.value);
+                        }
+                    }
+                    await setDoc(docRef, {imageUrls: finalUrls}, {merge: true});
+                }
                 toast({ title: 'Sucesso!', description: 'Novo memorial criado.' });
             } else {
                 const docRef = doc(firestore, 'pet_profiles', id as string);
                 await setDoc(docRef, processedData, { merge: true });
                 toast({ title: 'Sucesso!', description: 'Memorial atualizado.' });
             }
+
             router.push('/admin/dashboard');
             router.refresh(); 
         } catch (error) {
@@ -291,41 +368,46 @@ const EditPetPage = () => {
 
                         <div>
                             <Label>Imagens</Label>
-                            <p className="text-sm text-muted-foreground mb-4">
-                                O upload de imagens está desativado para evitar custos. Uma imagem de placeholder será usada no lugar.
+                             <p className="text-sm text-muted-foreground mb-4">
+                                Adicione as fotos para o memorial. A primeira foto será a principal.
                             </p>
-                            <div className="space-y-4 mt-2 opacity-50 cursor-not-allowed">
-                                {fields.map((field, index) => {
-                                    const currentImage = watchedImages?.[index]?.value;
-                                    const previewUrl = currentImage instanceof File
-                                        ? URL.createObjectURL(currentImage)
-                                        : (typeof currentImage === 'string' ? currentImage : null);
-
-                                    return (
-                                        <div key={field.id} className="flex items-center gap-4">
-                                            <div className="w-24 h-24 relative bg-muted rounded-md overflow-hidden flex items-center justify-center">
-                                                {previewUrl ? (
-                                                    <Image src={previewUrl} alt={`Preview ${index}`} fill className="object-cover" />
-                                                ) : (
-                                                    <Upload className="text-muted-foreground" />
-                                                )}
-                                            </div>
-                                            <div className="flex-grow">
-                                                <Input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    disabled
-                                                    className="file:text-primary file:font-semibold"
-                                                />
-                                            </div>
-                                            <Button type="button" variant="ghost" size="icon" disabled>
-                                                <Trash className="h-4 w-4" />
-                                            </Button>
+                            <div className="space-y-4 mt-2">
+                                {fields.map((field, index) => (
+                                    <div key={field.id} className="flex items-center gap-4">
+                                        <div className="w-24 h-24 relative bg-muted rounded-md overflow-hidden flex items-center justify-center">
+                                            {imagePreviews[index] ? (
+                                                <Image src={imagePreviews[index]!} alt={`Preview ${index}`} fill className="object-cover" />
+                                            ) : (
+                                                <Upload className="text-muted-foreground" />
+                                            )}
                                         </div>
-                                    );
-                                })}
+                                        <div className="flex-grow">
+                                             <Controller
+                                                control={form.control}
+                                                name={`images.${index}.value`}
+                                                render={({ field: { onChange, onBlur, name, ref } }) => (
+                                                    <Input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onBlur={onBlur}
+                                                        name={name}
+                                                        ref={ref}
+                                                        onChange={(e) => {
+                                                            const file = e.target.files?.[0];
+                                                            onChange(file);
+                                                        }}
+                                                        className="file:text-primary file:font-semibold"
+                                                    />
+                                                )}
+                                            />
+                                        </div>
+                                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
+                                            <Trash className="h-4 w-4 text-destructive" />
+                                        </Button>
+                                    </div>
+                                ))}
                             </div>
-                            <Button type="button" variant="outline" size="sm" className="mt-4" disabled>
+                            <Button type="button" variant="outline" size="sm" className="mt-4" onClick={() => append({ value: undefined })}>
                                 Adicionar Imagem
                             </Button>
                         </div>
@@ -355,3 +437,4 @@ export default function GuardedEditPetPage() {
         </AuthGuard>
     );
 }
+
