@@ -95,13 +95,13 @@ ${message}
       <section className="py-16 text-center bg-white">
         <div className="container mx-auto max-w-7xl px-4">
           <h1 className="font-headline text-4xl md:text-5xl font-bold text-primary">Entre em Contato</h1>
-          <p className="mt-4 text-lg text-foreground/80 max-w-2xl mx-auto">
+          <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-2xl mx-auto">
             Estamos aqui para ajudar. Envie sua dúvida, sugestão ou solicitação de atendimento.
           </p>
         </div>
       </section>
       
-      <section className="container mx-auto max-w-7xl px-4 py-20">
+      <section className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="space-y-8">
@@ -128,7 +128,7 @@ ${message}
 
           {/* Contact Form */}
           <div>
-             <Card className="p-8 shadow-lg">
+             <Card className="p-6 md:p-8 shadow-lg">
                 <CardContent className="p-0">
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -201,4 +201,3 @@ ${message}
     </div>
   );
 }
-

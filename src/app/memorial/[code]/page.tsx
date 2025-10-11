@@ -109,17 +109,17 @@ const PetProfilePage = () => {
     if (isLoading) {
         return (
              <div className="container mx-auto max-w-5xl my-12 p-4">
-                <Skeleton className="h-12 w-1/4 mb-8" />
+                <Skeleton className="h-10 w-48 mb-8" />
                 <Card className="overflow-hidden shadow-xl">
                     <div className="grid md:grid-cols-2">
                         <Skeleton className="aspect-square w-full" />
-                        <div className="p-8 space-y-6">
+                        <div className="p-6 md:p-8 space-y-6">
                             <Skeleton className="h-10 w-3/4" />
                             <Skeleton className="h-5 w-full" />
                             <Skeleton className="h-5 w-full" />
                             <Skeleton className="h-5 w-2/3" />
                             <Separator />
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
                             </div>
                         </div>
@@ -174,7 +174,7 @@ const PetProfilePage = () => {
                         <div className="p-6 md:p-8 flex flex-col bg-white">
                             <header className="text-left mb-6">
                                 <h1 className="font-headline text-4xl md:text-5xl text-primary mb-2">{selectedPet.name}</h1>
-                                <p className='italic text-muted-foreground'>
+                                <p className='italic text-muted-foreground text-base md:text-lg'>
                                     "{selectedPet.shortDescription}"
                                 </p>
                             </header>

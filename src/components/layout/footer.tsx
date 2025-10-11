@@ -11,9 +11,9 @@ export function Footer() {
   return (
     <footer className="bg-white border-t">
       <div className="container mx-auto max-w-7xl px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
           {/* Logo and Description */}
-          <div className="md:col-span-1 flex flex-col items-start gap-4">
+          <div className="md:col-span-1 flex flex-col items-center md:items-start gap-4">
             <Logo />
             <p className="text-sm text-muted-foreground">
               Uma despedida digna e cheia de amor para quem te deu tudo.
@@ -46,7 +46,7 @@ export function Footer() {
           {/* Social Media */}
           <div className="md:col-span-1">
              <h3 className="font-semibold text-foreground mb-4">Redes Sociais</h3>
-             <div className="flex items-center gap-4">
+             <div className="flex items-center justify-center md:justify-start gap-4">
                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Facebook size={20} /></a>
                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Instagram size={20} /></a>
                 <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Twitter size={20} /></a>

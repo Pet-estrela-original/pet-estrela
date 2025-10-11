@@ -28,16 +28,16 @@ export default function EspacoPage() {
                  <div className="absolute inset-0 bg-black/50" />
                  <div className="relative container mx-auto max-w-7xl h-full flex flex-col items-center justify-center text-center text-white p-4 z-10">
                     <h1 className="font-headline text-4xl md:text-5xl font-bold drop-shadow-lg">Nosso Espaço</h1>
-                    <p className="mt-4 text-xl max-w-2xl drop-shadow-md">Um ambiente pensado para o conforto, a paz e a dignidade.</p>
+                    <p className="mt-4 text-lg md:text-xl max-w-2xl drop-shadow-md">Um ambiente pensado para o conforto, a paz e a dignidade.</p>
                 </div>
             </section>
 
              {/* Gallery Section */}
-            <section className="py-20 lg:py-28">
+            <section className="py-16 md:py-20">
                 <div className="container mx-auto max-w-7xl px-4">
                     <div className="text-center mb-12">
-                        <h2 className="font-headline text-4xl text-primary mb-6">Conheça Nossas Instalações</h2>
-                         <p className="mt-4 text-lg text-foreground/80 max-w-2xl mx-auto">
+                        <h2 className="font-headline text-3xl md:text-4xl text-primary mb-6">Conheça Nossas Instalações</h2>
+                         <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-2xl mx-auto">
                            Cada detalhe foi planejado para oferecer um acolhimento sereno em um momento de dor.
                         </p>
                     </div>
@@ -58,8 +58,8 @@ export default function EspacoPage() {
                                             />
                                         )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                        <div className="absolute bottom-0 left-0 p-6 text-white">
-                                            <h3 className="font-headline text-2xl font-bold">{item.title}</h3>
+                                        <div className="absolute bottom-0 left-0 p-4 md:p-6 text-white">
+                                            <h3 className="font-headline text-xl md:text-2xl font-bold">{item.title}</h3>
                                             <p className="text-sm opacity-90">{item.description}</p>
                                         </div>
                                     </div>
@@ -71,9 +71,9 @@ export default function EspacoPage() {
             </section>
 
             {/* Video Section */}
-            <section className="py-20 lg:py-28 bg-background">
+            <section className="py-16 md:py-20 bg-background">
                 <div className="container mx-auto max-w-4xl px-4 text-center">
-                    <h2 className="font-headline text-4xl text-primary mb-12">Tour Virtual</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl text-primary mb-12">Tour Virtual</h2>
                     <Card className="overflow-hidden shadow-2xl">
                          <div className="relative aspect-video">
                             <video

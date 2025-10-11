@@ -29,11 +29,11 @@ const features = [
 
 export function WhyChooseUs() {
     return (
-        <section className="py-20 lg:py-28 bg-white">
+        <section className="py-16 md:py-20 bg-white">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="text-center mb-12">
-                    <h2 className="font-headline text-4xl font-bold text-primary">Por Que Escolher o Pet Estrela?</h2>
-                    <p className="mt-4 text-lg text-foreground/80 max-w-2xl mx-auto">
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Por Que Escolher o Pet Estrela?</h2>
+                    <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-2xl mx-auto">
                         Oferecemos um serviço completo, com a sensibilidade e o respeito que este momento delicado exige.
                     </p>
                 </div>
@@ -56,6 +56,3 @@ export function WhyChooseUs() {
         </section>
     );
 }
-    
-
-

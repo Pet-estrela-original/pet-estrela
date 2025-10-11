@@ -16,11 +16,11 @@ export function TestimonialsCarousel() {
     );
 
     return (
-        <section className="py-20 lg:py-28 bg-background">
+        <section className="py-16 md:py-20 bg-background">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="text-center mb-16">
-                    <h2 className="font-headline text-4xl font-bold text-primary">Depoimentos</h2>
-                    <p className="mt-4 text-lg text-foreground/80 max-w-2xl mx-auto">
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Depoimentos</h2>
+                    <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-2xl mx-auto">
                         O carinho e a gratidão de quem confia em nosso trabalho.
                     </p>
                 </div>
@@ -50,7 +50,7 @@ export function TestimonialsCarousel() {
                                                         alt={testimonial.name}
                                                         data-ai-hint={testimonialImage.imageHint}
                                                         fill
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                        sizes="96px"
                                                         className="object-cover object-top"
                                                     />
                                                 </div>

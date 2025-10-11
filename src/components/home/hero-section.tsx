@@ -39,7 +39,7 @@ export function HeroSection() {
     );
 
     return (
-        <section className="relative h-[calc(100vh-80px)] min-h-[600px] w-full text-white">
+        <section className="relative h-[calc(100vh-80px)] min-h-[500px] md:min-h-[600px] w-full text-white">
             <Carousel 
                 plugins={[plugin.current]}
                 className="w-full h-full"
@@ -49,7 +49,7 @@ export function HeroSection() {
                 <CarouselContent>
                     {staticSlides.map((slide, index) => (
                         <CarouselItem key={index}>
-                             <div className="relative w-full h-[calc(100vh-80px)] min-h-[600px]">
+                             <div className="relative w-full h-[calc(100vh-80px)] min-h-[500px] md:min-h-[600px]">
                                 <Image
                                     src={slide.imageUrl}
                                     alt={slide.alt}

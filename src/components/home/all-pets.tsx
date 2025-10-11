@@ -47,14 +47,14 @@ export function AllPets() {
     const image = PlaceHolderImages.find(p => p.id === 'all-pets-image');
 
     return (
-        <section className="py-20 lg:py-28 bg-background">
+        <section className="py-16 md:py-20 bg-background">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     <div className="order-2 md:order-1">
                         <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-6">
                             Acolhemos Todos os Tipos de Pets
                         </h2>
-                        <p className="text-lg text-foreground/80 mb-8">
+                        <p className="text-base md:text-lg text-foreground/80 mb-8">
                             Nosso amor e respeito se estendem a todos os animais, não importa a espécie ou o porte. Estamos preparados para oferecer uma despedida digna a cada um deles.
                         </p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">

@@ -27,7 +27,7 @@ export default function SobrePage() {
     return (
         <div className="bg-background">
             {/* Hero Section */}
-            <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+            <section className="relative h-[50vh] min-h-[350px] overflow-hidden">
                 <video
                     src="https://i.imgur.com/0gU3GKf.mp4"
                     autoPlay
@@ -39,15 +39,15 @@ export default function SobrePage() {
                 <div className="absolute inset-0 bg-black/60"></div>
                 <div className="relative container mx-auto max-w-7xl h-full flex flex-col items-center justify-center text-center text-white p-4 z-10">
                     <h1 className="font-headline text-4xl md:text-5xl font-bold drop-shadow-lg">Nossa História</h1>
-                    <p className="mt-4 text-xl max-w-2xl drop-shadow-lg">Movidos pelo amor incondicional que os pets nos oferecem.</p>
+                    <p className="mt-4 text-lg md:text-xl max-w-2xl drop-shadow-lg">Movidos pelo amor incondicional que os pets nos oferecem.</p>
                 </div>
             </section>
 
             {/* Mission Section */}
-            <section className="py-20 lg:py-28 bg-white">
+            <section className="py-16 md:py-20 bg-white">
                 <div className="container mx-auto max-w-4xl px-4 text-center">
                     <h2 className="font-headline text-3xl md:text-4xl text-primary mb-6">Nossa Missão é Honrar a Memória</h2>
-                    <div className="text-lg text-foreground/80 space-y-6 leading-relaxed max-w-3xl mx-auto">
+                    <div className="text-base md:text-lg text-foreground/80 space-y-6 leading-relaxed max-w-3xl mx-auto">
                         <p>
                             O Pet Estrela Crematório nasceu de um sentimento profundo: a dor da perda de um companheiro fiel e o desejo de oferecer uma despedida que estivesse à altura de tanto amor e lealdade. A empresa foi fundada a partir da experiência de anos testemunhando a dificuldade dos tutores em encontrar um serviço de cremação que fosse ao mesmo tempo profissional, respeitoso e acolhedor.
                         </p>
@@ -59,12 +59,12 @@ export default function SobrePage() {
             </section>
             
             {/* Values Section */}
-            <section className="py-20 lg:py-28 bg-background">
+            <section className="py-16 md:py-20 bg-background">
                 <div className="container mx-auto max-w-7xl px-4 text-center">
-                    <h2 className="font-headline text-3xl md:text-4xl text-primary mb-16">Nossos Valores</h2>
+                    <h2 className="font-headline text-3xl md:text-4xl text-primary mb-12 md:mb-16">Nossos Valores</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {values.map((value) => (
-                           <Card key={value.title} className="text-center shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 bg-white p-8">
+                           <Card key={value.title} className="text-center shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 bg-white p-6 md:p-8">
                                 <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
                                     {value.icon}
                                 </div>
@@ -77,7 +77,7 @@ export default function SobrePage() {
             </section>
             
              {/* Quote Section */}
-             <section className="py-20 lg:py-28 bg-white">
+             <section className="py-16 md:py-20 bg-white">
                  <div className="container mx-auto max-w-4xl px-4 text-center">
                     <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-0 shadow-xl overflow-hidden">
                         <CardContent className="p-8 md:p-12 relative">

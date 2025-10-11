@@ -34,11 +34,11 @@ const steps: { number: string; title: string; description: string; icon: ReactEl
 
 export function ProcessSteps() {
     return (
-        <section className="py-20 lg:py-28 bg-white">
+        <section className="py-16 md:py-20 bg-white">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="text-center mb-16">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary">Nosso Processo de Cremação</h2>
-                    <p className="mt-4 text-lg text-foreground/80 max-w-3xl mx-auto">
+                    <p className="mt-4 text-base md:text-lg text-foreground/80 max-w-3xl mx-auto">
                         Conduzimos cada etapa com máxima transparência, cuidado e seriedade.
                     </p>
                 </div>
