@@ -9,7 +9,8 @@ export const Logo = () => (
             alt="Pet Estrela Crematório Logo" 
             width={140} 
             height={40} 
-            className="block drop-shadow-sm" 
+            className="block drop-shadow-sm h-auto"
+            style={{ width: '140px', height: 'auto' }}
             priority 
         />
     </Link>
