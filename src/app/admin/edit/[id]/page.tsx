@@ -54,7 +54,7 @@ const fileToDataUrl = (file: File): Promise<string> => {
 
 const EditPetPage = () => {
     const { id } = useParams();
-    const { firestore } = useFirebase(); // Removed 'storage'
+    const { firestore } = useFirebase();
     const router = useRouter();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
@@ -160,20 +160,20 @@ const EditPetPage = () => {
                         const dataUrl = await fileToDataUrl(imageField.value);
                         imageUrls.push(dataUrl);
                     } else if (typeof imageField.value === 'string' && imageField.value) {
-                        // Keep existing URL (could be http or data: URL)
                         imageUrls.push(imageField.value);
                     }
                 }
             }
             
-            const processedData = {
+            const processedData: Omit<PetFormValues, 'images'> & { [key: string]: any } = {
                 ...data,
                 birthDate: data.birthDate ? new Date(data.birthDate) : null,
                 cremationDate: data.cremationDate ? new Date(data.cremationDate) : null,
-                imageUrls, // Save the array of data URIs
-                images: undefined, // Remove the form-specific images field
+                imageUrls: imageUrls || [],
                 updatedAt: serverTimestamp(),
             };
+            
+            delete processedData.images;
             
             if (isNew) {
                 const newData = { ...processedData, createdAt: serverTimestamp() };
@@ -410,3 +410,6 @@ export default function GuardedEditPetPage() {
     );
 }
 
+
+
+    
