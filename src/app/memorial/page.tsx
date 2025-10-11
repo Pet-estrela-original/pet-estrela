@@ -152,7 +152,7 @@ export default function MemorialPage() {
 
     return (
         <div className="min-h-screen bg-background">
-            <section className="relative h-[60vh] min-h-[450px] text-white flex items-center justify-center text-center overflow-hidden">
+            <section className="relative h-[80vh] md:h-[60vh] min-h-[500px] text-white flex items-center justify-center text-center overflow-hidden">
                 <video
                     src="https://i.imgur.com/3V6WYmV.mp4"
                     autoPlay
@@ -163,8 +163,8 @@ export default function MemorialPage() {
                 />
                 <div className="absolute inset-0 bg-black/50" />
                 <div className="relative container mx-auto max-w-7xl px-4 z-10">
-                    <h1 className="font-headline text-4xl md:text-5xl font-bold drop-shadow-md">Memorial Pet Estrela</h1>
-                    <p className="mt-4 text-base md:text-lg leading-relaxed max-w-3xl mx-auto drop-shadow-md">
+                    <h1 className="font-headline text-3xl md:text-5xl font-bold drop-shadow-md">Memorial Pet Estrela</h1>
+                    <p className="mt-4 text-sm md:text-base leading-relaxed max-w-3xl mx-auto drop-shadow-md">
                         O Memorial Pet Estrela foi criado como uma forma carinhosa de eternizar a lembrança dos nossos animais que se tornaram estrelinhas. Aqui, cada vida é celebrada através do plantio de uma árvore, que simboliza amor, renovação e memória eterna.  Além de homenagear nossos companheiros, este memorial também contribui para o reflorestamento, com mudas frutíferas e nativas, fortalecendo a natureza.  As cinzas de cada pet são depositadas junto à muda escolhida e recebem uma identificação única. Por meio do QR Code, é possível consultar essa numeração e acessar as informações sobre o animal e a árvore que guarda sua lembrança.
                     </p>
                 </div>
