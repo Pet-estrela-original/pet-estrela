@@ -6,7 +6,7 @@ export const Logo = () => (
     <Link href="/" className="inline-block">
         <div className="relative w-[140px] h-[40px]">
             <Image 
-                src="https://i.imgur.com/blBpKxs.png" 
+                src="https://i.imgur.com/vkU2IlK.png" 
                 alt="Pet Estrela Crematório Logo" 
                 fill
                 className="object-contain"
