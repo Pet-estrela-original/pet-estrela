@@ -123,16 +123,6 @@ export function Header() {
                             Contato
                         </Link>
                     </SheetClose>
-                     <SheetClose asChild>
-                        <Link
-                            href="/admin/login"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex items-center gap-2 text-gray-700 transition-colors hover:text-primary"
-                        >
-                            <User />
-                            Login
-                        </Link>
-                    </SheetClose>
                 </nav>
                  <div className="mt-auto flex flex-col gap-4">
                     <Button asChild size="lg">
@@ -142,7 +132,7 @@ export function Header() {
                     </Button>
                     <div className="flex justify-center gap-4">
                          <a href="https://www.instagram.com/petestrelacrematorio/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors"><Instagram size={24} /></a>
-                         <a href="https://www.instagram.com/petestrelacrematorio/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors"><Facebook size={24} /></a>
+                         <a href="https://www.facebook.com/profile.php?id=100085433544976" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary transition-colors"><Facebook size={24} /></a>
                     </div>
                  </div>
               </div>
