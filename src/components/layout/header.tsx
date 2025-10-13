@@ -41,32 +41,36 @@ export function Header() {
         isScrolled ? "border-b bg-white/70 backdrop-blur-sm" : "bg-white"
       )}>
       <div className={cn(
-          "container flex items-center justify-between transition-all duration-300",
+          "container relative flex items-center justify-between transition-all duration-300",
           isScrolled ? "h-16" : "h-20"
         )}>
-        <div className="flex-1 md:flex-none">
+        
+        {/* Logo on the left */}
+        <div className="flex items-center">
           <Logo />
         </div>
         
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-medium">
+        {/* Desktop Navigation (Absolutely Centered) */}
+        <nav className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "transition-colors hover:text-primary",
+                "transition-colors hover:text-primary whitespace-nowrap",
                 pathname === link.href ? "text-primary" : "text-gray-600"
               )}
             >
               {link.label}
             </Link>
           ))}
-           <Link href="/contato" className={cn("transition-colors hover:text-primary", pathname === "/contato" ? "text-primary" : "text-gray-600")}>
+           <Link href="/contato" className={cn("transition-colors hover:text-primary whitespace-nowrap", pathname === "/contato" ? "text-primary" : "text-gray-600")}>
               Contato
             </Link>
         </nav>
-        <div className="hidden md:flex flex-1 justify-end items-center gap-4">
+        
+        {/* Contact Button on the right */}
+        <div className="hidden md:flex items-center">
            <Button asChild>
             <Link href={whatsappUrl} target="_blank">
               Fale Conosco
