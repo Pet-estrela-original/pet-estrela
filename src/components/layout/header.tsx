@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, User, Instagram, Facebook } from "lucide-react";
+import { Menu, X, Instagram, Facebook } from "lucide-react";
 import { usePathname } from "next/navigation";
 import * as React from 'react';
 
@@ -44,10 +44,12 @@ export function Header() {
           "container flex items-center justify-between transition-all duration-300",
           isScrolled ? "h-16" : "h-20"
         )}>
-        <Logo />
+        <div className="flex-1 md:flex-none">
+          <Logo />
+        </div>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+        <nav className="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -64,7 +66,7 @@ export function Header() {
               Contato
             </Link>
         </nav>
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex flex-1 justify-end items-center gap-4">
            <Button asChild>
             <Link href={whatsappUrl} target="_blank">
               Fale Conosco
@@ -82,7 +84,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full">
-              <SheetHeader className="sr-only">
+               <SheetHeader className="sr-only">
                   <SheetTitle>Menu Principal</SheetTitle>
                   <SheetDescription>Navegue pelas seções do site.</SheetDescription>
               </SheetHeader>
