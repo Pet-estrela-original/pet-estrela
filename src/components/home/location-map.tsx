@@ -26,7 +26,7 @@ export function LocationMap() {
                     ></iframe>
                 </div>
                  <div className="mt-8 text-center space-y-4">
-                    <p className="text-muted-foreground">Av. Adília Barbosa Neves, 2740 - Centro Industrial, Arujá - SP, 07432-575</p>
+                    <p className="text-muted-foreground">Av. Adília Barbosa Neves, 2500-2682 - Centro Industrial</p>
                     <div className="flex justify-center gap-4">
                         <Button asChild>
                             <Link href="https://www.google.com/maps/dir//Av.+Ad%C3%ADlia+Barbosa+Neves,+2740+-+Centro+Industrial,+Aruj%C3%A1+-+SP,+07432-575/@-23.4180192,-46.3315806,17z/data=!4m8!4m7!1m0!1m5!1m1!1s0x94ce7b1e2e987979:0x88504997063a4362!2m2!1d-46.3290057!2d-23.418024" target="_blank">
