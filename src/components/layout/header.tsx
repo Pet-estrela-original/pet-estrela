@@ -41,35 +41,34 @@ export function Header() {
         isScrolled ? "border-b bg-white/70 backdrop-blur-sm" : "bg-white"
       )}>
       <div className={cn(
-          "container relative flex items-center justify-between transition-all duration-300",
+          "container flex items-center justify-between transition-all duration-300",
           isScrolled ? "h-16" : "h-20"
         )}>
         
-        {/* Logo on the left */}
-        <div className="flex items-center">
+        {/* Left Side: Logo + Navigation */}
+        <div className="flex items-center gap-8">
           <Logo />
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "transition-colors hover:text-primary whitespace-nowrap",
+                  pathname === link.href ? "text-primary" : "text-gray-600"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+             <Link href="/contato" className={cn("transition-colors hover:text-primary whitespace-nowrap", pathname === "/contato" ? "text-primary" : "text-gray-600")}>
+                Contato
+              </Link>
+          </nav>
         </div>
         
-        {/* Desktop Navigation (Absolutely Centered) */}
-        <nav className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 text-sm font-medium">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "transition-colors hover:text-primary whitespace-nowrap",
-                pathname === link.href ? "text-primary" : "text-gray-600"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-           <Link href="/contato" className={cn("transition-colors hover:text-primary whitespace-nowrap", pathname === "/contato" ? "text-primary" : "text-gray-600")}>
-              Contato
-            </Link>
-        </nav>
-        
-        {/* Contact Button on the right */}
+        {/* Right Side: Contact Button */}
         <div className="hidden md:flex items-center">
            <Button asChild>
             <Link href={whatsappUrl} target="_blank">
@@ -78,7 +77,7 @@ export function Header() {
           </Button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Trigger */}
         <div className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
