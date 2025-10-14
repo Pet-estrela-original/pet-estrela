@@ -4,13 +4,13 @@ import Image from 'next/image';
 
 export const Logo = () => (
     <Link href="/" className="inline-block">
-        <div className="relative w-[300px] h-[85px]">
+        <div className="relative w-[600px] h-[170px]">
             <Image 
                 src="https://i.imgur.com/vkU2IlK.png" 
                 alt="Pet Estrela Crematório Logo" 
                 fill
                 className="object-contain"
-                sizes="300px"
+                sizes="600px"
                 priority 
             />
         </div>
