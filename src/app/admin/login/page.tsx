@@ -14,8 +14,8 @@ import { Logo } from '@/components/ui/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('crematorioestrela@gmail.com');
-  const [password, setPassword] = useState('CR3MATORIO_2025_@2025');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { auth } = useFirebase();
   const router = useRouter();
@@ -79,6 +79,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
+                placeholder="Sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
