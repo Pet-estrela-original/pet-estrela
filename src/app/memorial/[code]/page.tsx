@@ -11,7 +11,7 @@ import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, query, where } from 'firebase/firestore';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Calendar, Heart, User, Venus, Mars, TreePine, Hash, ArrowLeft } from 'lucide-react';
+import { Calendar, Heart, User, Venus, Mars, TreePine, Hash, ArrowLeft, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -75,6 +75,8 @@ const PetProfilePage = () => {
     const { firestore } = useFirebase();
     
     const memorialCode = params.code ? `#${params.code}` : null;
+    const mapLocationUrl = "https://www.google.com/maps/place/23%C2%B024'11.6%22S+46%C2%B021'01.6%22W/@-23.4031183,-46.350651,100m/data=!3m1!1e3!4m4!3m3!8m2!3d-23.403216!4d-46.350453?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D";
+
 
     const petQuery = useMemoFirebase(() => {
         if (!firestore || !memorialCode) return null;
@@ -194,6 +196,30 @@ const PetProfilePage = () => {
                             </div>
                         </div>
                     </div>
+                </Card>
+
+                 <Card className="mt-8 shadow-xl">
+                    <CardContent className="p-6">
+                         <h2 className="font-headline text-2xl text-primary mb-4 flex items-center gap-2">
+                           <MapPin size={24} />
+                           Localização no Jardim Memorial
+                        </h2>
+                        <p className="text-muted-foreground mb-4">
+                           A árvore em homenagem a {selectedPet.name} está plantada em nosso jardim. Clique no mapa abaixo para ver a localização exata e fazer uma visita.
+                        </p>
+                        <Link href={mapLocationUrl} target="_blank" rel="noopener noreferrer" className="block relative aspect-video rounded-md overflow-hidden group">
+                           <Image 
+                              src="https://i.imgur.com/uG3gXhT.jpeg"
+                              alt="Mapa da localização do memorial"
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              sizes="(max-width: 1024px) 100vw, 1024px"
+                           />
+                           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
+                              <span className="text-white font-bold text-lg bg-black/50 px-4 py-2 rounded-md">Ver no Mapa</span>
+                           </div>
+                        </Link>
+                    </CardContent>
                 </Card>
             </div>
         </div>
