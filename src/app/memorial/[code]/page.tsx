@@ -75,7 +75,9 @@ const PetProfilePage = () => {
     const { firestore } = useFirebase();
     
     const memorialCode = params.code ? `#${params.code}` : null;
-    const mapLocationUrl = "https://www.google.com/maps/place/23%C2%B024'11.6%22S+46%C2%B021'01.6%22W/@-23.4031183,-46.350651,100m/data=!3m1!1e3!4m4!3m3!8m2!3d-23.403216!4d-46.350453?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D";
+    const embedUrl = "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d716.4800318536218!2d-46.3504070014282!3d-23.4034475960417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDI0JzExLjYiUyA0NsKwMjEnMDEuNiJX!5e0!3m2!1spt-BR!2sbr!4v1721160359737!5m2!1spt-BR!2sbr";
+    const placeUrl = "https://www.google.com/maps/place/23%C2%B024'11.6%22S+46%C2%B021'01.6%22W/@-23.4034476,-46.350407,283m/data=!3m1!1e3!4m4!3m3!8m2!3d-23.4032222!4d-46.3504444?entry=ttu&g_ep=EgoyMDI1MTAxMi4wIKXMDSoASAFQAw%3D%3D";
+    const directionsUrl = "https://www.google.com/maps/dir//-23.4032222,-46.3504444/@-23.4034476,-46.350407,283m/data=!4m2!4m1!3e0?entry=ttu";
 
 
     const petQuery = useMemoFirebase(() => {
@@ -205,20 +207,31 @@ const PetProfilePage = () => {
                            Localização no Jardim Memorial
                         </h2>
                         <p className="text-muted-foreground mb-4">
-                           A árvore em homenagem a {selectedPet.name} está plantada em nosso jardim. Clique no mapa abaixo para ver a localização exata e fazer uma visita.
+                           A árvore em homenagem a {selectedPet.name} está plantada em nosso jardim. Use o mapa abaixo para ver a localização exata e fazer uma visita.
                         </p>
-                        <Link href={mapLocationUrl} target="_blank" rel="noopener noreferrer" className="block relative aspect-video rounded-md overflow-hidden group">
-                           <Image 
-                              src="https://i.imgur.com/uG3gXhT.jpeg"
-                              alt="Mapa da localização do memorial"
-                              fill
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
-                              sizes="(max-width: 1024px) 100vw, 1024px"
-                           />
-                           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                              <span className="text-white font-bold text-lg bg-black/50 px-4 py-2 rounded-md">Ver no Mapa</span>
-                           </div>
-                        </Link>
+                        <div className="aspect-video w-full rounded-lg overflow-hidden border shadow-lg">
+                             <iframe
+                                src={embedUrl}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen={false}
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
+                         <div className="mt-8 text-center flex justify-center gap-4">
+                            <Button asChild>
+                                <Link href={directionsUrl} target="_blank">
+                                    Obter Rotas
+                                </Link>
+                            </Button>
+                            <Button asChild variant="outline">
+                                 <Link href={placeUrl} target="_blank">
+                                    Ver mapa ampliado
+                                </Link>
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
@@ -228,3 +241,5 @@ const PetProfilePage = () => {
 
 
 export default PetProfilePage;
+
+    
