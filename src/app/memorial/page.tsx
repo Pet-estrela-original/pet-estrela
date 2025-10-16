@@ -288,5 +288,4 @@ export default function MemorialPage() {
             </section>
         </div>
     );
-
-    
+}
