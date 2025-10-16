@@ -4,7 +4,7 @@
 import React from 'react';
 import { collection, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirebase, useMemoFirebase } from '@/firebase/provider';
+import { useFirebase, useMemoFirebase, useUser } from '@/firebase/provider';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -70,14 +70,15 @@ const PetCard = ({ pet, onDelete }: { pet: PetProfile, onDelete: (id: string) =>
 
 const DashboardPage = () => {
     const { firestore, auth } = useFirebase();
+    const { user } = useUser();
     const router = useRouter();
     const { toast } = useToast();
 
     const petProfilesQuery = useMemoFirebase(() => {
-        if (!firestore) return null;
-        // Ordena por código do memorial em ordem decrescente para mostrar os mais novos primeiro.
-        return query(collection(firestore, 'pet_profiles'), orderBy('memorialCode', 'desc'));
-    }, [firestore]);
+        if (!firestore || !user?.uid) return null;
+        // Busca os perfis da subcoleção do usuário logado.
+        return query(collection(firestore, 'users', user.uid, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
+    }, [firestore, user?.uid]);
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
 
@@ -89,10 +90,10 @@ const DashboardPage = () => {
     };
 
     const handleDelete = async (id: string) => {
-        if (!firestore) return;
+        if (!firestore || !user?.uid) return;
         if (confirm('Tem certeza que deseja excluir este memorial? Esta ação não pode ser desfeita.')) {
             try {
-                await deleteDoc(doc(firestore, 'pet_profiles', id));
+                await deleteDoc(doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id));
                 toast({ title: "Sucesso!", description: "Memorial excluído com sucesso." });
             } catch (error) {
                 console.error("Erro ao excluir o memorial:", error);

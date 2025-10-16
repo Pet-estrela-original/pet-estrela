@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query, where } from 'firebase/firestore';
+import { collectionGroup, query, where } from 'firebase/firestore';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Calendar, Heart, User, Venus, Mars, TreePine, Hash, ArrowLeft, MapPin } from 'lucide-react';
 import Link from 'next/link';
@@ -82,7 +82,8 @@ const PetProfilePage = () => {
 
     const petQuery = useMemoFirebase(() => {
         if (!firestore || !memorialCode) return null;
-        return query(collection(firestore, 'pet_profiles'), where('memorialCode', '==', memorialCode));
+        // Usa collectionGroup para buscar em todas as subcoleções 'pet_memorial_profiles'.
+        return query(collectionGroup(firestore, 'pet_memorial_profiles'), where('memorialCode', '==', memorialCode));
     }, [firestore, memorialCode]);
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petQuery);
@@ -241,5 +242,3 @@ const PetProfilePage = () => {
 
 
 export default PetProfilePage;
-
-    

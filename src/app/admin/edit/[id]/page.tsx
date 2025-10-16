@@ -7,7 +7,7 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, getDoc, setDoc, addDoc, deleteDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { useFirebase } from '@/firebase/provider';
+import { useFirebase, useUser } from '@/firebase/provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -55,6 +55,7 @@ const fileToDataUrl = (file: File): Promise<string> => {
 const EditPetPage = () => {
     const { id } = useParams();
     const { firestore } = useFirebase();
+    const { user } = useUser();
     const router = useRouter();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(true);
@@ -113,14 +114,14 @@ const EditPetPage = () => {
 
 
     useEffect(() => {
-        if (!firestore || isNew) {
+        if (!firestore || isNew || !user?.uid) {
             setIsLoading(false);
             return;
         }
 
         const fetchPet = async () => {
             try {
-                const docRef = doc(firestore, 'pet_profiles', id as string);
+                const docRef = doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
@@ -145,10 +146,10 @@ const EditPetPage = () => {
         };
 
         fetchPet();
-    }, [id, firestore, form, router, toast, isNew]);
+    }, [id, firestore, user?.uid, form, router, toast, isNew]);
 
     const onSubmit = async (data: PetFormValues) => {
-        if (!firestore) return;
+        if (!firestore || !user?.uid) return;
         setIsSaving(true);
         
         try {
@@ -177,10 +178,11 @@ const EditPetPage = () => {
             
             if (isNew) {
                 const newData = { ...processedData, createdAt: serverTimestamp() };
-                await addDoc(collection(firestore, 'pet_profiles'), newData);
+                const collectionRef = collection(firestore, 'users', user.uid, 'pet_memorial_profiles');
+                await addDoc(collectionRef, newData);
                 toast({ title: 'Sucesso!', description: 'Novo memorial criado.' });
             } else {
-                const docRef = doc(firestore, 'pet_profiles', id as string);
+                const docRef = doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string);
                 await setDoc(docRef, processedData, { merge: true });
                 toast({ title: 'Sucesso!', description: 'Memorial atualizado.' });
             }
@@ -197,11 +199,11 @@ const EditPetPage = () => {
     };
     
     const handleDelete = async () => {
-        if (!firestore || isNew) return;
+        if (!firestore || isNew || !user?.uid) return;
 
         if (confirm('Tem certeza que deseja excluir este memorial? Esta ação é irreversível.')) {
             try {
-                await deleteDoc(doc(firestore, 'pet_profiles', id as string));
+                await deleteDoc(doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string));
                 toast({ title: 'Sucesso!', description: 'Memorial excluído.' });
                 router.push('/admin/dashboard');
                 router.refresh();
@@ -409,7 +411,3 @@ export default function GuardedEditPetPage() {
         </AuthGuard>
     );
 }
-
-
-
-    
