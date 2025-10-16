@@ -74,6 +74,7 @@ export default function MemorialPage() {
 
     const formatDate = React.useCallback((dateString: string | { toDate: () => Date }) => {
         try {
+             if (!dateString) return "Não informado";
             const date = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate();
             if (isNaN(date.getTime())) return "Data inválida";
 
@@ -110,7 +111,7 @@ export default function MemorialPage() {
                     (pet.tutors && pet.tutors.toLowerCase().includes(searchTermLower)) ||
                     cremationDate.toLowerCase().includes(searchTermLower);
 
-                const matchesAnimal = animalFilter === 'all' || (pet.animalType && pet.animalType.toLowerCase() === animalFilter.toLowerCase());
+                const matchesAnimal = animalFilter === 'all' || (pet.animalType && pet.animalType.toLowerCase().startsWith(animalFilter.toLowerCase()));
                 
                 return matchesSearch && matchesAnimal;
             })
@@ -130,8 +131,13 @@ export default function MemorialPage() {
                 }
                 
                 try {
-                    const dateA = a.cremationDate ? (typeof a.cremationDate === 'string' ? new Date(a.cremationDate) : a.cremationDate.toDate()).getTime() : 0;
-                    const dateB = b.cremationDate ? (typeof b.cremationDate === 'string' ? new Date(b.cremationDate) : b.cremationDate.toDate()).getTime() : 0;
+                    const dateAValue = a.cremationDate;
+                    const dateBValue = b.cremationDate;
+
+                    if (!dateAValue || !dateBValue) return 0;
+
+                    const dateA = (typeof dateAValue === 'string' ? new Date(dateAValue) : dateAValue.toDate()).getTime();
+                    const dateB = (typeof dateBValue === 'string' ? new Date(dateBValue) : dateBValue.toDate()).getTime();
                     
                      if (isNaN(dateA) || isNaN(dateB)) return 0;
                     
@@ -147,7 +153,7 @@ export default function MemorialPage() {
             });
     }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
     
-    const showLoadingSkeleton = isLoading || !petProfilesQuery;
+    const showLoadingSkeleton = isLoading;
     const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
 
 

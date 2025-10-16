@@ -90,6 +90,7 @@ const PetProfilePage = () => {
 
     const formatDate = React.useCallback((dateString: string | { toDate: () => Date }) => {
         try {
+            if (!dateString) return "Não informado";
             const date = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate();
             if (isNaN(date.getTime())) return "Data inválida";
 
@@ -109,7 +110,7 @@ const PetProfilePage = () => {
         }
     }, []);
     
-    const showLoadingSkeleton = isLoading || !petQuery;
+    const showLoadingSkeleton = isLoading || !memorialCode;
 
     if (showLoadingSkeleton) {
         return (

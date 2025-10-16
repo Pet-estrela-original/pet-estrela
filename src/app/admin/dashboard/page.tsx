@@ -69,7 +69,7 @@ const PetCard = ({ pet, onDelete }: { pet: PetProfile, onDelete: (id: string) =>
 
 
 const DashboardPage = () => {
-    const { firestore, auth } = useFirebase();
+    const { firestore, auth, isUserLoading: isFirebaseLoading } = useFirebase();
     const { user } = useUser();
     const router = useRouter();
     const { toast } = useToast();
@@ -79,8 +79,8 @@ const DashboardPage = () => {
         return query(collection(firestore, 'users', user.uid, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
     }, [firestore, user?.uid]);
 
-    const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
-
+    const { data: pets, isLoading: arePetsLoading } = useCollection<PetProfile>(petProfilesQuery);
+    
     const handleLogout = async () => {
         if (auth) {
             await auth.signOut();
@@ -101,7 +101,7 @@ const DashboardPage = () => {
         }
     };
     
-    const showLoadingSkeleton = isLoading || !petProfilesQuery;
+    const showLoadingSkeleton = arePetsLoading || isFirebaseLoading;
 
     return (
         <div className="min-h-screen bg-background">
