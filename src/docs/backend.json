@@ -84,13 +84,13 @@
   "firestore": {
     "structure": [
       {
-        "path": "/pet_profiles/{petProfileId}",
+        "path": "/users/{userId}/pet_memorial_profiles/{profileId}",
         "definition": {
           "entityName": "PetProfile",
           "schema": {
             "$ref": "#/backend/entities/PetProfile"
           },
-          "description": "Stores pet profile information. This collection is publicly readable, but only writable by authenticated admin users."
+          "description": "Stores pet memorial profiles under a specific user. The public can read, but only the owner (userId) can write."
         }
       }
     ]

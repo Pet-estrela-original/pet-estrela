@@ -1,58 +1,81 @@
 /**
- * @fileOverview Firestore Security Rules for Pet Memorial Profiles.
+ * @fileoverview Firestore Security Rules for Pet Memorial Profiles.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model, where each user can only access their own pet memorial profiles.
+ * This ruleset enforces a strict user-ownership model, where each user can only
+ * access the pet memorial profiles associated with their own user ID.
  *
  * Data Structure:
- * All pet memorial profiles are nested under /users/{userId}/pet_memorial_profiles/{profileId}.
+ * All pet memorial profile data is nested under /users/{userId}/pet_memorial_profiles/{profileId}.
  *
  * Key Security Decisions:
- * - Users can only manage (create, read, update, delete) pet memorial profiles under their own user ID.
- * - Listing profiles is restricted to the owner.
- * - The rules do not validate the data schema beyond requiring the `id` field to match the `profileId` on creation.
+ * - Listing all documents in the entire database is disallowed. This prevents
+ *   unauthenticated or unauthorized users from discovering all pet memorial profiles.
+ * - Only authenticated users can manage their own profiles.
  *
  * Denormalization for Authorization:
- *  The `id` field of each pet memorial profile must match the `profileId` in the path. This ensures that users can only create profiles with their own user ID.
+ * The `pet_memorial_profiles` subcollection is structured under each user's document in the `users` collection, ensuring that only the authenticated user can access and manage their respective pet memorial profiles. This eliminates the need for complex authorization logic or denormalization of data.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Secures the pet memorial profiles for each user.
+     * @description Checks if the user is signed in.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user's ID matches the provided user ID.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the authenticated user is the owner of the existing document.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description Applies to the root of the database. Listing all documents is disallowed.
+     * @path /databases/(default)/documents/
+     * @allow None. Listing all documents is forbidden.
+     * @deny Any list operation.
+     * @principle Prevents unauthorized listing of all documents in the database.
+     */
+    match /{document=**} {
+      allow list: if false;
+      allow get: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Manages pet memorial profiles for a specific user. Only the authenticated user can
+     *              create, read, update, or delete profiles under their ID.
      * @path /users/{userId}/pet_memorial_profiles/{profileId}
-     * @allow (create) - User A can create a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and request.resource.data.id == "123".
-     * @allow (get) - User A can get a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A".
-     * @allow (update) - User A can update a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and the document exists.
-     * @allow (delete) - User A can delete a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and the document exists.
-     * @allow (list) - User A can list pet memorial profiles under /users/A/pet_memorial_profiles if request.auth.uid == "A".
-     * @deny (create) - User A cannot create a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
-     * @deny (create) - User A cannot create a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.resource.data.id != "123".
-     * @deny (get) - User A cannot get a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
-     * @deny (update) - User A cannot update a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
-     * @deny (delete) - User A cannot delete a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
-     * @principle Enforces document ownership for all operations.
+     * @allow (create) Signed-in user with ID 'user123' creates a new pet memorial profile under /users/user123/pet_memorial_profiles/profile456.
+     * @allow (get) Signed-in user with ID 'user123' retrieves their pet memorial profile from /users/user123/pet_memorial_profiles/profile456.
+     * @allow (update) Signed-in user with ID 'user123' updates their pet memorial profile at /users/user123/pet_memorial_profiles/profile456.
+     * @allow (delete) Signed-in user with ID 'user123' deletes their pet memorial profile at /users/user123/pet_memorial_profiles/profile456.
+     * @deny (create) Signed-in user with ID 'user456' attempts to create a profile under /users/user123/pet_memorial_profiles.
+     * @deny (get) Unauthenticated user attempts to read a pet memorial profile from /users/user123/pet_memorial_profiles/profile456.
+     * @deny (update) Signed-in user with ID 'user456' attempts to update a profile under /users/user123/pet_memorial_profiles/profile456.
+     * @deny (delete) Signed-in user with ID 'user456' attempts to delete a profile under /users/user123/pet_memorial_profiles/profile456.
+     * @principle Enforces document ownership, restricts access to a user's own data tree, and validates relational integrity.
      */
     match /users/{userId}/pet_memorial_profiles/{profileId} {
-      // Helper function to check if the request is made by the owner
-      function isOwner(userId) {
-        return request.auth != null && request.auth.uid == userId;
-      }
-
-      // Helper function to check if the request is made by the owner and the document exists
-      function isExistingOwner(userId) {
-        return isOwner(userId) && resource != null;
-      }
-
-      // Read operations
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-
-      // Write operations
-      allow create: if isOwner(userId) && request.resource.data.id == profileId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isSignedIn() && isExistingOwner(userId);
     }
   }
 }
