@@ -114,14 +114,14 @@ const EditPetPage = () => {
 
 
     useEffect(() => {
-        if (!firestore || isNew || !user?.uid) {
+        if (!firestore || isNew) {
             setIsLoading(false);
             return;
         }
 
         const fetchPet = async () => {
             try {
-                const docRef = doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string);
+                const docRef = doc(firestore, 'pet_memorial_profiles', id as string);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
@@ -146,7 +146,7 @@ const EditPetPage = () => {
         };
 
         fetchPet();
-    }, [id, firestore, user?.uid, form, router, toast, isNew]);
+    }, [id, firestore, form, router, toast, isNew]);
 
     const onSubmit = async (data: PetFormValues) => {
         if (!firestore || !user?.uid) return;
@@ -177,12 +177,12 @@ const EditPetPage = () => {
             delete processedData.images;
             
             if (isNew) {
-                const newData = { ...processedData, createdAt: serverTimestamp() };
-                const collectionRef = collection(firestore, 'users', user.uid, 'pet_memorial_profiles');
+                const newData = { ...processedData, createdAt: serverTimestamp(), ownerId: user.uid };
+                const collectionRef = collection(firestore, 'pet_memorial_profiles');
                 await addDoc(collectionRef, newData);
                 toast({ title: 'Sucesso!', description: 'Novo memorial criado.' });
             } else {
-                const docRef = doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string);
+                const docRef = doc(firestore, 'pet_memorial_profiles', id as string);
                 await setDoc(docRef, processedData, { merge: true });
                 toast({ title: 'Sucesso!', description: 'Memorial atualizado.' });
             }
@@ -199,11 +199,11 @@ const EditPetPage = () => {
     };
     
     const handleDelete = async () => {
-        if (!firestore || isNew || !user?.uid) return;
+        if (!firestore || isNew) return;
 
         if (confirm('Tem certeza que deseja excluir este memorial? Esta ação é irreversível.')) {
             try {
-                await deleteDoc(doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id as string));
+                await deleteDoc(doc(firestore, 'pet_memorial_profiles', id as string));
                 toast({ title: 'Sucesso!', description: 'Memorial excluído.' });
                 router.push('/admin/dashboard');
                 router.refresh();

@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collectionGroup, query } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 
 type PetProfile = {
   id: string;
@@ -72,7 +72,7 @@ export default function MemorialPage() {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
-        return query(collectionGroup(firestore, 'pet_memorial_profiles'));
+        return query(collection(firestore, 'pet_memorial_profiles'));
     }, [firestore]);
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);

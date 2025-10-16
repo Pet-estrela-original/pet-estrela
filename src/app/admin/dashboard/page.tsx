@@ -4,7 +4,7 @@
 import React from 'react';
 import { collection, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirebase, useMemoFirebase, useUser } from '@/firebase/provider';
+import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -69,15 +69,14 @@ const PetCard = ({ pet, onDelete }: { pet: PetProfile, onDelete: (id: string) =>
 
 
 const DashboardPage = () => {
-    const { firestore, auth, isUserLoading: isFirebaseLoading } = useFirebase();
-    const { user } = useUser();
+    const { firestore, auth } = useFirebase();
     const router = useRouter();
     const { toast } = useToast();
 
     const petProfilesQuery = useMemoFirebase(() => {
-        if (!firestore || !user?.uid) return null;
-        return query(collection(firestore, 'users', user.uid, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
-    }, [firestore, user?.uid]);
+        if (!firestore) return null;
+        return query(collection(firestore, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
+    }, [firestore]);
 
     const { data: pets, isLoading: arePetsLoading } = useCollection<PetProfile>(petProfilesQuery);
     
@@ -89,10 +88,10 @@ const DashboardPage = () => {
     };
 
     const handleDelete = async (id: string) => {
-        if (!firestore || !user?.uid) return;
+        if (!firestore) return;
         if (confirm('Tem certeza que deseja excluir este memorial? Esta ação não pode ser desfeita.')) {
             try {
-                await deleteDoc(doc(firestore, 'users', user.uid, 'pet_memorial_profiles', id));
+                await deleteDoc(doc(firestore, 'pet_memorial_profiles', id));
                 toast({ title: "Sucesso!", description: "Memorial excluído com sucesso." });
             } catch (error) {
                 console.error("Erro ao excluir o memorial:", error);
@@ -101,7 +100,7 @@ const DashboardPage = () => {
         }
     };
     
-    const showLoadingSkeleton = arePetsLoading || isFirebaseLoading;
+    const showLoadingSkeleton = arePetsLoading;
 
     return (
         <div className="min-h-screen bg-background">
