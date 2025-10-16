@@ -73,6 +73,11 @@ const InfoItem = ({ icon, label, value }: { icon: React.ReactNode, label: string
 const PetProfilePage = () => {
     const params = useParams();
     const { firestore } = useFirebase();
+    const [isClient, setIsClient] = React.useState(false);
+    
+    React.useEffect(() => {
+        setIsClient(true);
+    }, []);
     
     const memorialCode = params.code ? `#${params.code}` : null;
     const embedUrl = "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d716.4800318536218!2d-46.3504070014282!3d-23.4034475960417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDI0JzExLjYiUyA0NsKwMjEnMDEuNiJX!5e0!3m2!1spt-BR!2sbr!4v1721160359737!5m2!1spt-BR!2sbr";
@@ -110,7 +115,7 @@ const PetProfilePage = () => {
         }
     }, []);
     
-    const showLoadingSkeleton = isLoading || !memorialCode;
+    const showLoadingSkeleton = !isClient || isLoading || !memorialCode;
 
     if (showLoadingSkeleton) {
         return (

@@ -64,6 +64,11 @@ export default function MemorialPage() {
     const [animalFilter, setAnimalFilter] = React.useState('all');
     const [sortOrder, setSortOrder] = React.useState('protocol_desc');
     const { firestore } = useFirebase();
+    const [isClient, setIsClient] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
@@ -153,7 +158,7 @@ export default function MemorialPage() {
             });
     }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
     
-    const showLoadingSkeleton = isLoading;
+    const showLoadingSkeleton = !isClient || isLoading;
     const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
 
 
