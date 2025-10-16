@@ -67,7 +67,7 @@ export default function MemorialPage() {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
-        // Usa collectionGroup para buscar em todas as subcoleções 'pet_memorial_profiles'
+        // A consulta só é criada quando o firestore está disponível
         return query(collectionGroup(firestore, 'pet_memorial_profiles'));
     }, [firestore]);
 
@@ -148,8 +148,11 @@ export default function MemorialPage() {
                
             });
     }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
+    
+    // Exibe o esqueleto se a query não estiver pronta ou estiver carregando
+    const showLoadingSkeleton = isLoading || !petProfilesQuery;
+    const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
 
-    const showNoResults = !isLoading && filteredAndSortedPets.length === 0;
 
     return (
         <div className="min-h-screen bg-background">
@@ -209,7 +212,7 @@ export default function MemorialPage() {
                     </div>
                 </div>
 
-                {isLoading && (
+                {showLoadingSkeleton && (
                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[...Array(8)].map((_, i) => (
                            <Card key={i}>
@@ -224,36 +227,39 @@ export default function MemorialPage() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filteredAndSortedPets.map(pet => {
-                        return (
-                           <Link key={pet.id} href={`/memorial/${pet.memorialCode.replace('#', '')}`} className="group block">
-                                <Card className="overflow-hidden cursor-pointer shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 h-full">
-                                    <CardContent className="p-0 flex flex-col h-full">
-                                        <div className="relative aspect-square">
-                                            <Badge variant="secondary" className="absolute top-3 left-3 z-10 text-base">
-                                                {pet.memorialCode}
-                                            </Badge>
-                                            {pet.imageUrls?.[0] && (
-                                                <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
-                                                    <MediaItem src={pet.imageUrls[0]} alt={pet.name} />
+                {!showLoadingSkeleton && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {filteredAndSortedPets.map(pet => {
+                            return (
+                               <Link key={pet.id} href={`/memorial/${pet.memorialCode.replace('#', '')}`} className="group block">
+                                    <Card className="overflow-hidden cursor-pointer shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 h-full">
+                                        <CardContent className="p-0 flex flex-col h-full">
+                                            <div className="relative aspect-square">
+                                                <Badge variant="secondary" className="absolute top-3 left-3 z-10 text-base">
+                                                    {pet.memorialCode}
+                                                </Badge>
+                                                {pet.imageUrls?.[0] && (
+                                                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
+                                                        <MediaItem src={pet.imageUrls[0]} alt={pet.name} />
+                                                    </div>
+                                                )}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                                <div className="absolute bottom-0 left-0 p-4 text-white">
+                                                    <h3 className="font-headline text-2xl font-bold">{pet.name}</h3>
+                                                    <p className="font-body text-sm opacity-80">{pet.breed}</p>
                                                 </div>
-                                            )}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                            <div className="absolute bottom-0 left-0 p-4 text-white">
-                                                <h3 className="font-headline text-2xl font-bold">{pet.name}</h3>
-                                                <p className="font-body text-sm opacity-80">{pet.breed}</p>
                                             </div>
-                                        </div>
-                                        <div className="p-4 bg-white flex-grow flex flex-col">
-                                            <p className="text-sm italic text-muted-foreground line-clamp-2 flex-grow">"{pet.shortDescription}"</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </Link>
-                        )
-                    })}
-                </div>
+                                            <div className="p-4 bg-white flex-grow flex flex-col">
+                                                <p className="text-sm italic text-muted-foreground line-clamp-2 flex-grow">"{pet.shortDescription}"</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            )
+                        })}
+                    </div>
+                )}
+
                  {showNoResults && (
                     <div className="text-center py-12 text-muted-foreground">
                         <p>Nenhum perfil de memorial encontrado com os filtros atuais.</p>

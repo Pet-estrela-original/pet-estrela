@@ -76,9 +76,9 @@ const DashboardPage = () => {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore || !user?.uid) return null;
-        // Busca os perfis da subcoleção do usuário logado.
+        // A consulta só é criada quando firestore e user.uid estão disponíveis.
         return query(collection(firestore, 'users', user.uid, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
-    }, [firestore, user?.uid]);
+    }, [firestore, user]); // Dependa do objeto 'user' para reagir a mudanças de login
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
 
@@ -102,6 +102,9 @@ const DashboardPage = () => {
         }
     };
     
+    // Renderiza o esqueleto de carregamento se a query não estiver pronta (user ou firestore indisponíveis)
+    const showLoadingSkeleton = isLoading || !petProfilesQuery;
+
     return (
         <div className="min-h-screen bg-background">
             <header className="bg-white border-b sticky top-0 z-10">
@@ -125,7 +128,7 @@ const DashboardPage = () => {
                     </Button>
                 </div>
 
-                {isLoading && (
+                {showLoadingSkeleton && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {[...Array(8)].map((_, i) => (
                             <Card key={i}>
@@ -139,7 +142,7 @@ const DashboardPage = () => {
                     </div>
                 )}
                 
-                {pets && pets.length > 0 && (
+                {!showLoadingSkeleton && pets && pets.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {pets.map(pet => (
                             <PetCard key={pet.id} pet={pet} onDelete={handleDelete} />
@@ -147,7 +150,7 @@ const DashboardPage = () => {
                     </div>
                 )}
 
-                {!isLoading && (!pets || pets.length === 0) && (
+                {!showLoadingSkeleton && (!pets || pets.length === 0) && (
                     <div className="text-center py-16 border-dashed border-2 rounded-lg">
                         <p className="text-muted-foreground">Nenhum memorial encontrado.</p>
                         <p className="text-muted-foreground text-sm">Comece adicionando um novo memorial.</p>

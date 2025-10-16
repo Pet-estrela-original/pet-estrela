@@ -82,7 +82,6 @@ const PetProfilePage = () => {
 
     const petQuery = useMemoFirebase(() => {
         if (!firestore || !memorialCode) return null;
-        // Usa collectionGroup para buscar em todas as subcoleções 'pet_memorial_profiles'.
         return query(collectionGroup(firestore, 'pet_memorial_profiles'), where('memorialCode', '==', memorialCode));
     }, [firestore, memorialCode]);
 
@@ -94,7 +93,6 @@ const PetProfilePage = () => {
             const date = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate();
             if (isNaN(date.getTime())) return "Data inválida";
 
-            // Se for string, pode precisar de ajuste de fuso horário
             if (typeof dateString === 'string') {
                 const offset = date.getTimezoneOffset();
                 date.setMinutes(date.getMinutes() + offset);
@@ -110,8 +108,11 @@ const PetProfilePage = () => {
             return "Data inválida";
         }
     }, []);
+    
+    // Mostra o skeleton enquanto a query não está pronta (firestore ou memorialCode indisponíveis) ou está carregando
+    const showLoadingSkeleton = isLoading || !petQuery;
 
-    if (isLoading) {
+    if (showLoadingSkeleton) {
         return (
              <div className="container mx-auto max-w-5xl my-12 p-4">
                 <Skeleton className="h-10 w-48 mb-8" />
