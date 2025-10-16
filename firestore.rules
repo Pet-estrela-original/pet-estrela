@@ -1,64 +1,57 @@
 /**
- * @fileoverview Firestore Security Rules for Pet Memorial Profiles.
+ * @fileOverview Firestore Security Rules for Pet Memorial Profiles.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model. Each user has exclusive
- * access to their own pet memorial profiles stored under their user ID.
+ * This ruleset enforces a strict user-ownership model, where each user can only access their own pet memorial profiles.
  *
  * Data Structure:
- * All pet memorial profile data is nested under `/users/{userId}/pet_memorial_profiles/{profileId}`.
+ * All pet memorial profiles are nested under /users/{userId}/pet_memorial_profiles/{profileId}.
  *
  * Key Security Decisions:
- * - Users can only access and manage profiles associated with their own user ID.
- * - The `list` operation is allowed, enabling users to view their own list of memorial profiles.
- * - Data shape validation is relaxed for prototyping, focusing on ownership and relational integrity.
+ * - Users can only manage (create, read, update, delete) pet memorial profiles under their own user ID.
+ * - Listing profiles is restricted to the owner.
+ * - The rules do not validate the data schema beyond requiring the `id` field to match the `profileId` on creation.
  *
  * Denormalization for Authorization:
- * The authorization model relies on path-based ownership, eliminating the need
- * for data denormalization. The `userId` parameter in the path is directly
- * compared with the authenticated user's `uid`.
- *
- * Structural Segregation:
- * All data is private and user-specific, eliminating the need for separate
- * collections for public vs. private data.
+ *  The `id` field of each pet memorial profile must match the `profileId` in the path. This ensures that users can only create profiles with their own user ID.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Manages pet memorial profiles for a specific user.
+     * @description Secures the pet memorial profiles for each user.
      * @path /users/{userId}/pet_memorial_profiles/{profileId}
-     * @allow (create) - Authenticated user with UID 'user123' can create a profile under /users/user123/pet_memorial_profiles/profile456.
-     * @allow (get, update, delete) - Authenticated user with UID 'user123' can get, update, or delete a profile under /users/user123/pet_memorial_profiles/profile456.
-     * @allow (list) - Authenticated user with UID 'user123' can list profiles under /users/user123/pet_memorial_profiles.
-     * @deny (create, get, update, delete, list) - Authenticated user with UID 'user456' cannot access profiles under /users/user123/pet_memorial_profiles.
-     * @principle Enforces document ownership for writes and restricts access to a user's own data tree.
+     * @allow (create) - User A can create a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and request.resource.data.id == "123".
+     * @allow (get) - User A can get a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A".
+     * @allow (update) - User A can update a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and the document exists.
+     * @allow (delete) - User A can delete a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.auth.uid == "A" and the document exists.
+     * @allow (list) - User A can list pet memorial profiles under /users/A/pet_memorial_profiles if request.auth.uid == "A".
+     * @deny (create) - User A cannot create a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
+     * @deny (create) - User A cannot create a pet memorial profile under /users/A/pet_memorial_profiles/123 if request.resource.data.id != "123".
+     * @deny (get) - User A cannot get a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
+     * @deny (update) - User A cannot update a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
+     * @deny (delete) - User A cannot delete a pet memorial profile under /users/B/pet_memorial_profiles/123 because request.auth.uid != "B".
+     * @principle Enforces document ownership for all operations.
      */
     match /users/{userId}/pet_memorial_profiles/{profileId} {
-      // Helper function to check if the authenticated user is the owner of the profile.
+      // Helper function to check if the request is made by the owner
       function isOwner(userId) {
         return request.auth != null && request.auth.uid == userId;
       }
 
-      // Helper function to check if the authenticated user is the owner of an existing profile.
+      // Helper function to check if the request is made by the owner and the document exists
       function isExistingOwner(userId) {
         return isOwner(userId) && resource != null;
       }
 
-      // Allow get requests if the user is the owner.
+      // Read operations
       allow get: if isOwner(userId);
-
-      // Allow list requests if the user is the owner.
       allow list: if isOwner(userId);
 
-      // Allow create requests if the user is the owner and the profile's id matches the profileId.
+      // Write operations
       allow create: if isOwner(userId) && request.resource.data.id == profileId;
-
-      // Allow update requests if the user is the owner and the profile exists, and the id is immutable.
       allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-
-      // Allow delete requests if the user is the owner and the profile exists.
       allow delete: if isExistingOwner(userId);
     }
   }
