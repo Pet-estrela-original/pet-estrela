@@ -239,7 +239,7 @@ export default function MemorialPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredAndSortedPets.map(pet => {
                             return (
-                               <Link key={pet.id} href={`/memorial/${pet.memorialCode.replace('#', '')}`} className="group block">
+                               <Link key={pet.id} href={`/memorial/${pet.memorialCode ? pet.memorialCode.replace('#', '') : ''}`} className="group block">
                                     <Card className="overflow-hidden cursor-pointer shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 h-full">
                                         <CardContent className="p-0 flex flex-col h-full">
                                             <div className="relative aspect-square">
