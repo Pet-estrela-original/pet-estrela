@@ -76,9 +76,8 @@ const DashboardPage = () => {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore || !user?.uid) return null;
-        // A consulta só é criada quando firestore e user.uid estão disponíveis.
         return query(collection(firestore, 'users', user.uid, 'pet_memorial_profiles'), orderBy('memorialCode', 'desc'));
-    }, [firestore, user]); // Dependa do objeto 'user' para reagir a mudanças de login
+    }, [firestore, user?.uid]);
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
 
@@ -102,7 +101,6 @@ const DashboardPage = () => {
         }
     };
     
-    // Renderiza o esqueleto de carregamento se a query não estiver pronta (user ou firestore indisponíveis)
     const showLoadingSkeleton = isLoading || !petProfilesQuery;
 
     return (

@@ -67,7 +67,6 @@ export default function MemorialPage() {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
-        // A consulta só é criada quando o firestore está disponível
         return query(collectionGroup(firestore, 'pet_memorial_profiles'));
     }, [firestore]);
 
@@ -78,7 +77,6 @@ export default function MemorialPage() {
             const date = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate();
             if (isNaN(date.getTime())) return "Data inválida";
 
-            // Se for string, pode precisar de ajuste de fuso horário
             if (typeof dateString === 'string') {
                 const offset = date.getTimezoneOffset();
                 date.setMinutes(date.getMinutes() + offset);
@@ -140,7 +138,7 @@ export default function MemorialPage() {
                      if (sortOrder === 'cremationDate_asc') {
                         return dateA - dateB;
                     }
-                    return dateB - dateA; // Default is 'cremationDate_desc'
+                    return dateB - dateA; 
                 } catch(e) {
                     console.error("Error parsing date for sorting:", e);
                     return 0; 
@@ -149,7 +147,6 @@ export default function MemorialPage() {
             });
     }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
     
-    // Exibe o esqueleto se a query não estiver pronta ou estiver carregando
     const showLoadingSkeleton = isLoading || !petProfilesQuery;
     const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
 

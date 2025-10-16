@@ -109,7 +109,6 @@ const PetProfilePage = () => {
         }
     }, []);
     
-    // Mostra o skeleton enquanto a query não está pronta (firestore ou memorialCode indisponíveis) ou está carregando
     const showLoadingSkeleton = isLoading || !petQuery;
 
     if (showLoadingSkeleton) {
