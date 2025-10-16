@@ -77,13 +77,14 @@ export default function MemorialPage() {
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
 
-    const formatDate = React.useCallback((dateString: string | { toDate: () => Date }) => {
+    const formatDate = React.useCallback((dateValue: string | { toDate: () => Date } | undefined | null) => {
         try {
-             if (!dateString) return "Não informado";
-            const date = typeof dateString === 'string' ? new Date(dateString) : dateString.toDate();
-            if (isNaN(date.getTime())) return "Data inválida";
+            if (!dateValue) return "";
+            const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue.toDate();
+            if (isNaN(date.getTime())) return "";
 
-            if (typeof dateString === 'string') {
+            // Adjust for timezone issues if the input is a string
+            if (typeof dateValue === 'string') {
                 const offset = date.getTimezoneOffset();
                 date.setMinutes(date.getMinutes() + offset);
             }
@@ -93,34 +94,37 @@ export default function MemorialPage() {
                 month: 'long',
                 day: 'numeric',
             }).format(date);
-        } catch(e) {
-            console.error("Error formatting date:", e, "Input:", dateString);
-            return "Data inválida";
+        } catch (e) {
+            console.error("Error formatting date:", e, "Input:", dateValue);
+            return "";
         }
     }, []);
+
 
     const filteredAndSortedPets = React.useMemo(() => {
         if (!pets) return [];
         return pets
             .filter(pet => {
-                if (!pet || !pet.name) return false;
+                if (!pet || !pet.name || !pet.memorialCode) return false;
 
                 const searchTermLower = searchTerm.toLowerCase();
-
-                const cremationDate = pet.cremationDate ? formatDate(pet.cremationDate) : '';
+                const cremationDate = formatDate(pet.cremationDate);
 
                 const matchesSearch = 
                     pet.name.toLowerCase().includes(searchTermLower) ||
                     pet.memorialCode.toLowerCase().includes(searchTermLower) ||
                     (pet.breed && pet.breed.toLowerCase().includes(searchTermLower)) ||
                     (pet.tutors && pet.tutors.toLowerCase().includes(searchTermLower)) ||
-                    cremationDate.toLowerCase().includes(searchTermLower);
+                    (cremationDate && cremationDate.toLowerCase().includes(searchTermLower));
 
                 const matchesAnimal = animalFilter === 'all' || (pet.animalType && pet.animalType.toLowerCase().startsWith(animalFilter.toLowerCase()));
                 
                 return matchesSearch && matchesAnimal;
             })
             .sort((a, b) => {
+                 // Ensure 'a' and 'b' and their names are valid before comparing
+                if (!a?.name || !b?.name) return 0;
+
                 if (sortOrder === 'name_asc') {
                     return a.name.localeCompare(b.name);
                 }
@@ -129,8 +133,10 @@ export default function MemorialPage() {
                 }
 
                 if(sortOrder.includes('protocol')) {
-                    const numA = parseInt(a.memorialCode.replace('#', ''));
-                    const numB = parseInt(b.memorialCode.replace('#', ''));
+                    // Ensure 'a' and 'b' and their memorialCodes are valid before comparing
+                    if (!a?.memorialCode || !b?.memorialCode) return 0;
+                    const numA = parseInt(a.memorialCode.replace('#', ''), 10) || 0;
+                    const numB = parseInt(b.memorialCode.replace('#', ''), 10) || 0;
                     if(sortOrder === 'protocol_asc') return numA - numB;
                     return numB - numA;
                 }
@@ -149,12 +155,14 @@ export default function MemorialPage() {
                      if (sortOrder === 'cremationDate_asc') {
                         return dateA - dateB;
                     }
-                    return dateB - dateA; 
+                    if (sortOrder === 'cremationDate_desc') {
+                       return dateB - dateA; 
+                    }
                 } catch(e) {
                     console.error("Error parsing date for sorting:", e);
                     return 0; 
                 }
-               
+                return 0; // Default return if no sort condition is met
             });
     }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
     
@@ -238,8 +246,12 @@ export default function MemorialPage() {
                 {!showLoadingSkeleton && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredAndSortedPets.map(pet => {
+                            // Ensure the link is only rendered if memorialCode is valid
+                            const memorialCode = pet.memorialCode?.replace('#', '') || '';
+                            if (!memorialCode) return null;
+
                             return (
-                               <Link key={pet.id} href={`/memorial/${pet.memorialCode ? pet.memorialCode.replace('#', '') : ''}`} className="group block">
+                               <Link key={pet.id} href={`/memorial/${memorialCode}`} className="group block">
                                     <Card className="overflow-hidden cursor-pointer shadow-lg hover:shadow-primary/20 transition-all duration-300 transform hover:-translate-y-1 h-full">
                                         <CardContent className="p-0 flex flex-col h-full">
                                             <div className="relative aspect-square">
@@ -276,4 +288,5 @@ export default function MemorialPage() {
             </section>
         </div>
     );
-}
+
+    
