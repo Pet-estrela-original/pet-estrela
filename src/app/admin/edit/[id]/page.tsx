@@ -42,15 +42,29 @@ const formSchema = z.object({
 
 type PetFormValues = z.infer<typeof formSchema>;
 
-// Helper function to convert file to data URL
-const fileToDataUrl = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+// Helper function to upload image to ImgBB
+const uploadImage = async (file: File): Promise<string> => {
+    const apiKey = '4ab7940325f2ade2f7e3058fa3ae3cd9';
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: 'POST',
+        body: formData,
     });
+
+    if (!response.ok) {
+        throw new Error('Falha no upload da imagem.');
+    }
+
+    const result = await response.json();
+    if (!result.data || !result.data.url) {
+        throw new Error('URL da imagem não encontrada na resposta da API.');
+    }
+
+    return result.data.url;
 };
+
 
 const EditPetPage = () => {
     const { id } = useParams();
@@ -158,9 +172,11 @@ const EditPetPage = () => {
             if (data.images) {
                 for (const imageField of data.images) {
                     if (imageField.value instanceof File) {
-                        const dataUrl = await fileToDataUrl(imageField.value);
-                        imageUrls.push(dataUrl);
+                        // Upload to ImgBB and get URL
+                        const imageUrl = await uploadImage(imageField.value);
+                        imageUrls.push(imageUrl);
                     } else if (typeof imageField.value === 'string' && imageField.value) {
+                        // Keep existing URL
                         imageUrls.push(imageField.value);
                     }
                 }
@@ -411,3 +427,5 @@ export default function GuardedEditPetPage() {
         </AuthGuard>
     );
 }
+
+    
