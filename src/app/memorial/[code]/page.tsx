@@ -11,7 +11,7 @@ import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection, query, where } from 'firebase/firestore';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Calendar, Heart, User, Venus, Mars, TreePine, Hash, ArrowLeft, MapPin } from 'lucide-react';
+import { Calendar, Heart, User, Venus, Mars, TreePine, Hash, ArrowLeft, MapPin, QrCode } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -74,9 +74,11 @@ const PetProfilePage = () => {
     const params = useParams();
     const { firestore } = useFirebase();
     const [isClient, setIsClient] = React.useState(false);
+    const [pageUrl, setPageUrl] = React.useState('');
     
     React.useEffect(() => {
         setIsClient(true);
+        setPageUrl(window.location.href);
     }, []);
     
     const memorialCode = params.code ? `#${params.code}` : null;
@@ -241,6 +243,29 @@ const PetProfilePage = () => {
                         </div>
                     </CardContent>
                 </Card>
+                 <Card className="mt-8 shadow-xl">
+                    <CardContent className="p-6">
+                        <h2 className="font-headline text-2xl text-primary mb-4 flex items-center gap-2">
+                           <QrCode size={24} />
+                           QR Code do Memorial
+                        </h2>
+                        <div className="flex flex-col md:flex-row items-center gap-6">
+                            {pageUrl && (
+                                <div className="p-2 border rounded-lg bg-white">
+                                    <Image
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pageUrl)}`}
+                                        alt={`QR Code para o memorial de ${selectedPet.name}`}
+                                        width={150}
+                                        height={150}
+                                    />
+                                </div>
+                            )}
+                             <p className="text-muted-foreground text-center md:text-left">
+                                Aponte a câmera do seu celular para este código para acessar rapidamente o memorial de {selectedPet.name} a qualquer momento.
+                            </p>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );
@@ -248,3 +273,6 @@ const PetProfilePage = () => {
 
 
 export default PetProfilePage;
+
+
+    
