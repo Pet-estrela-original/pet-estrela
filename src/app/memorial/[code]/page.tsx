@@ -82,9 +82,9 @@ const PetProfilePage = () => {
     }, []);
     
     const memorialCode = params.code ? `#${params.code}` : null;
-    const embedUrl = "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d716.4800318536218!2d-46.3504070014282!3d-23.4034475960417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDI0JzExLjYiUyA0NsKwMjEnMDEuNiJX!5e0!3m2!1spt-BR!2sbr!4v1721160359737!5m2!1spt-BR!2sbr";
-    const placeUrl = "https://www.google.com/maps/place/23%C2%B024'11.6%22S+46%C2%B021'01.6%22W/@-23.4034476,-46.350407,283m/data=!3m1!1e3!4m4!3m3!8m2!3d-23.4032222!4d-46.3504444?entry=ttu&g_ep=EgoyMDI1MTAxMi4wIKXMDSoASAFQAw%3D%3D";
-    const directionsUrl = "https://www.google.com/maps/dir//-23.4032222,-46.3504444/@-23.4034476,-46.350407,283m/data=!4m2!4m1!3e0?entry=ttu";
+    const embedUrl = "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3658.118123249015!2d-46.3528656!3d-23.4022935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDI0JzA4LjMiUyA0NsKwMjEnMDEuMSJX!5e0!3m2!1spt-BR!2sbr!4v1731671987515!5m2!1spt-BR!2sbr";
+    const placeUrl = "https://www.google.com/maps/place/23%C2%B024'08.3%22S+46%C2%B021'01.1%22W/@-23.4022935,-46.3528656,17z/data=!3m1!4b1!4m4!3m3!8m2!3d-23.4022935!4d-46.3502907?entry=ttu";
+    const directionsUrl = "https://www.google.com/maps/dir//-23.4022935,-46.3502907/@-23.4022935,-46.3528656,17z/data=!4m2!4m1!3e0?entry=ttu";
 
 
     const petQuery = useMemoFirebase(() => {
