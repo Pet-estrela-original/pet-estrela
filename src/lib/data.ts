@@ -22,7 +22,7 @@ export const plans: Plan[] = [
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
     features: [
       "Cremação coletiva",
-      "Certificado de óbito",
+      "Certificado de Cremação",
     ],
     optional: "(+R$ 98,00) Plantio de uma muda de árvore nativa ou frutífera no Memorial PET Estrela, usando as cinzas do pet.",
     isMostChosen: false,
@@ -35,7 +35,7 @@ export const plans: Plan[] = [
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
-      "Certidão de óbito",
+      "Certificado de Cremação",
       "Plantio de árvore no Memorial PET Estrela com QR Code exclusivo",
     ],
     isMostChosen: true,
@@ -48,7 +48,7 @@ export const plans: Plan[] = [
     features: [
         "Cremação coletiva em compartimento separado",
         "Porta-retrato + moldura da patinha",
-        "Certidão de óbito",
+        "Certificado de Cremação",
         "Urna biodegradável entregue em casa ou plantio de árvore no Memorial PET Estrela",
         "Cartinha personalizada com foto do pet",
         "Preparação para velório simples"
