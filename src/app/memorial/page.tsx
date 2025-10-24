@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Dog, Cat } from 'lucide-react';
+import { Search, Dog, Cat, PawPrint } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -246,7 +246,6 @@ export default function MemorialPage() {
                 {!showLoadingSkeleton && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredAndSortedPets.map(pet => {
-                            // Ensure the link is only rendered if memorialCode is valid
                             const memorialCode = pet.memorialCode?.replace('#', '') || '';
                             if (!memorialCode) return null;
 
@@ -258,11 +257,15 @@ export default function MemorialPage() {
                                                 <Badge variant="secondary" className="absolute top-3 left-3 z-10 text-base">
                                                     {pet.memorialCode}
                                                 </Badge>
-                                                {pet.imageUrls?.[0] && (
-                                                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
+                                                <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-110">
+                                                    {pet.imageUrls?.[0] ? (
                                                         <MediaItem src={pet.imageUrls[0]} alt={pet.name} />
-                                                    </div>
-                                                )}
+                                                    ) : (
+                                                        <div className="w-full h-full bg-muted flex items-center justify-center">
+                                                            <PawPrint className="w-16 h-16 text-muted-foreground/50" />
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                                                 <div className="absolute bottom-0 left-0 p-4 text-white">
                                                     <h3 className="font-headline text-2xl font-bold">{pet.name}</h3>
