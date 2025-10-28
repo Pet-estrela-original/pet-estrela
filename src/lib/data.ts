@@ -39,6 +39,8 @@ export const plans: Plan[] = [
     name: "Harmonia",
     price: "R$ 960,00",
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
+    installments: "Em 12x de R$ 80,00",
+    discountInfo: "5% de desconto em pagamento à vista!",
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
