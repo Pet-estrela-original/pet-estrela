@@ -124,7 +124,7 @@ export default function PlanosPage() {
                     <div className="inline-flex items-center gap-3 bg-white p-4 rounded-lg shadow-md border text-center">
                         <CreditCard className="w-6 h-6 text-primary shrink-0" />
                         <p className="text-base text-center md:text-lg font-semibold text-foreground/90">
-                           Todos os planos podem ser parcelados em até 3x sem juros.
+                           12x sem juros
                         </p>
                     </div>
                 </div>
