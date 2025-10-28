@@ -54,6 +54,8 @@ export const plans: Plan[] = [
     name: "Eternus",
     price: "R$ 1.190,00",
     description: "Indicado para famílias que desejam uma homenagem mais completa e personalizada.",
+    installments: "Em 12x de R$ 99,17",
+    discountInfo: "5% de desconto em pagamento à vista!",
     features: [
         "Cremação coletiva em compartimento separado",
         "Porta-retrato + moldura da patinha",
