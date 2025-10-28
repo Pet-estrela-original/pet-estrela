@@ -9,6 +9,8 @@ export type Plan = {
   description: string;
   features: string[];
   optional?: string;
+  installments?: string;
+  discountInfo?: string;
   isMostChosen: boolean;
 };
 
@@ -20,6 +22,8 @@ export const plans: Plan[] = [
     priceCats: "R$ 280,00",
     priceDogs: "R$ 450,00",
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
+    installments: "Gatos em 12x de R$ 23,34",
+    discountInfo: "5% de desconto em pagamento à vista!",
     features: [
       "Cremação coletiva",
       "Certificado de Cremação",

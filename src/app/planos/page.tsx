@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle, PawPrint, CreditCard } from "lucide-react";
+import { CheckCircle, PawPrint, CreditCard, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { plans as staticPlans, Plan } from "@/lib/data";
@@ -25,12 +25,25 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
             )}
             <div className="text-center">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
-                 <div className="mb-6 min-h-[50px]">
+                 <div className="mb-6 min-h-[70px]">
                     {plan.price && <p className="text-4xl font-bold">{plan.price}</p>}
-                    {plan.priceDogs && plan.priceCats && (
+                    
+                    {plan.priceDogs && (
+                         <div className="mb-2">
+                             <p className="text-lg font-semibold">Cães: <span className="font-bold">{plan.priceDogs}</span></p>
+                         </div>
+                    )}
+                    {plan.priceCats && (
                         <div>
-                            <p className="text-lg font-semibold">Cães: <span className="font-bold">{plan.priceDogs}</span></p>
-                            <p className="text-lg font-semibold">Gatos: <span className="font-bold">{plan.priceCats}</span></p>
+                             <p className="text-lg font-semibold">Gatos: <span className="font-bold">{plan.priceCats}</span></p>
+                             {plan.installments && (
+                                <div className="mt-1">
+                                    <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
+                                        <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
+                                        {plan.installments}
+                                    </Badge>
+                                </div>
+                             )}
                         </div>
                     )}
                  </div>
@@ -53,6 +66,13 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                     </li>
                 )}
             </ul>
+
+            {plan.discountInfo && (
+                <p className="text-xs text-center text-green-700 font-semibold mb-4 bg-green-100 p-2 rounded-md">
+                    {plan.discountInfo}
+                </p>
+            )}
+
             <Button asChild variant="default" className="w-full mt-auto">
                 <Link href={whatsappUrl} target="_blank">Contratar Agora</Link>
             </Button>
