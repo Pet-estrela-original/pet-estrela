@@ -24,8 +24,8 @@ export const plans: Plan[] = [
     priceCats: "R$ 280,00",
     priceDogs: "R$ 450,00",
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installmentsCats: "Gatos em 12x de R$ 23,34",
-    installmentsDogs: "Cães em 12x de R$ 37,50",
+    installmentsCats: "Gatos em 12x de R$ 23,34 sem juros",
+    installmentsDogs: "Cães em 12x de R$ 37,50 sem juros",
     discountInfo: "5% de desconto em pagamento à vista!",
     features: [
       "Cremação coletiva",
@@ -39,7 +39,7 @@ export const plans: Plan[] = [
     name: "Harmonia",
     price: "R$ 960,00",
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installments: "Em 12x de R$ 80,00",
+    installments: "Em 12x de R$ 80,00 sem juros",
     discountInfo: "5% de desconto em pagamento à vista!",
     features: [
       "Cremação coletiva em compartimento separado",
@@ -54,7 +54,7 @@ export const plans: Plan[] = [
     name: "Eternus",
     price: "R$ 1.190,00",
     description: "Indicado para famílias que desejam uma homenagem mais completa e personalizada.",
-    installments: "Em 12x de R$ 99,17",
+    installments: "Em 12x de R$ 99,17 sem juros",
     discountInfo: "5% de desconto em pagamento à vista!",
     features: [
         "Cremação coletiva em compartimento separado",
