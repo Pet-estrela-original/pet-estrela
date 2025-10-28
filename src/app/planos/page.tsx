@@ -28,24 +28,34 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                  <div className="mb-6 min-h-[70px]">
                     {plan.price && <p className="text-4xl font-bold">{plan.price}</p>}
                     
-                    {plan.priceDogs && (
-                         <div className="mb-2">
-                             <p className="text-lg font-semibold">Cães: <span className="font-bold">{plan.priceDogs}</span></p>
-                         </div>
-                    )}
-                    {plan.priceCats && (
-                        <div>
-                             <p className="text-lg font-semibold">Gatos: <span className="font-bold">{plan.priceCats}</span></p>
-                             {plan.installments && (
-                                <div className="mt-1">
-                                    <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
-                                        <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
-                                        {plan.installments}
-                                    </Badge>
-                                </div>
-                             )}
-                        </div>
-                    )}
+                    <div className="space-y-2">
+                        {plan.priceDogs && (
+                            <div>
+                                <p className="text-lg font-semibold">Cães: <span className="font-bold">{plan.priceDogs}</span></p>
+                                {plan.installmentsDogs && (
+                                    <div className="mt-1">
+                                        <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
+                                            <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
+                                            {plan.installmentsDogs}
+                                        </Badge>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {plan.priceCats && (
+                            <div>
+                                <p className="text-lg font-semibold">Gatos: <span className="font-bold">{plan.priceCats}</span></p>
+                                {plan.installmentsCats && (
+                                    <div className="mt-1">
+                                        <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
+                                            <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
+                                            {plan.installmentsCats}
+                                        </Badge>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                  </div>
                  <p className="text-sm text-muted-foreground mb-6 h-12">{plan.description}</p>
             </div>
