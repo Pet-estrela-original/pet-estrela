@@ -64,6 +64,7 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                                         <h4 className="font-semibold text-lg">Gatos</h4>
                                         {renderPriceSection(plan.priceCats, plan.installmentsCats)}
                                     </div>
+
                                 )}
                             </div>
                         )}
@@ -109,7 +110,7 @@ export default function PlanosPage() {
             </section>
 
             <section className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
                     {staticPlans.map((plan, index) => {
                         const isMiddleCard = index === 1;
                         return (
