@@ -16,22 +16,20 @@ const whatsappUrl = "https://wa.me/551142405253?text=Olá!%20Tudo%20bem?%20Gosta
 
 const PlanCard = ({ plan }: { plan: Plan }) => {
     
-    const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    const calculateDiscountedPrice = (price: number) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price * 0.95);
     }
-    
-    const calculateDiscountedPrice = (price: number) => formatCurrency(price * 0.95);
 
-    const renderPriceSection = (originalPrice?: number, installmentsText?: string) => {
-        if (!originalPrice || !installmentsText) return null;
-
+    const renderPriceSection = (price?: number, installments?: string) => {
+        if (!price || !installments) return null;
+        
         return (
-             <div className="mb-4 text-center">
-                <p className="font-bold text-2xl md:text-3xl text-foreground">{installmentsText}</p>
+            <>
+                <p className="font-bold text-2xl md:text-3xl text-foreground">{installments}</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                    ou {calculateDiscountedPrice(originalPrice)} à vista
+                    ou {calculateDiscountedPrice(price)} à vista
                 </p>
-            </div>
+            </>
         );
     }
 
@@ -41,7 +39,7 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
             plan.isMostChosen && "border-primary/50"
         )}>
             {plan.isMostChosen && (
-                <Badge variant="default" className="absolute -top-3 right-5 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
+                <Badge variant="default" className="absolute top-4 right-4 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
             )}
             <div className="text-center z-10">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
