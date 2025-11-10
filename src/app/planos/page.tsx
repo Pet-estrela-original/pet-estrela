@@ -15,6 +15,32 @@ const whatsappUrl = "https://wa.me/551142405253?text=Olá!%20Tudo%20bem?%20Gosta
 
 
 const PlanCard = ({ plan }: { plan: Plan }) => {
+    
+    const formatCurrency = (value: number) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    }
+    
+    const calculateDiscountedPrice = (price: number) => formatCurrency(price * 0.95);
+
+    const renderPriceSection = (originalPrice?: number, installmentsText?: string) => {
+        if (!originalPrice || !installmentsText) return null;
+
+        const [installments, value] = installmentsText.split(' de ');
+
+        return (
+             <div className="mb-4">
+                <div className="flex justify-center items-baseline gap-2">
+                    <span className="font-bold text-4xl">{value}</span>
+                    <span className="text-xl text-muted-foreground">/mês</span>
+                </div>
+                 <p className="text-sm text-muted-foreground">{`no plano de ${installments}`}</p>
+                <p className="text-sm font-semibold mt-2">
+                    ou {calculateDiscountedPrice(originalPrice)} à vista
+                </p>
+            </div>
+        );
+    }
+
     return (
         <Card className={cn(
             "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent",
@@ -25,49 +51,26 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
             )}
             <div className="text-center">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
-                 <div className="mb-6 min-h-[70px]">
-                    {plan.price && (
-                         <div>
-                            <p className="text-4xl font-bold">{plan.price}</p>
-                             {plan.installments && (
-                                <div className="mt-1">
-                                    <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
-                                        <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
-                                        {plan.installments}
-                                    </Badge>
+                 <div className="mb-6 min-h-[100px] flex flex-col justify-center">
+                    {plan.price ? (
+                         renderPriceSection(plan.price, plan.installments)
+                    ) : (
+                        <div className="space-y-4">
+                            {plan.priceDogs && (
+                                <div>
+                                    <h4 className="font-semibold text-lg">Cães</h4>
+                                    {renderPriceSection(plan.priceDogs, plan.installmentsDogs)}
+                                </div>
+                            )}
+                             {plan.priceDogs && plan.priceCats && <Separator />}
+                            {plan.priceCats && (
+                                <div>
+                                    <h4 className="font-semibold text-lg">Gatos</h4>
+                                    {renderPriceSection(plan.priceCats, plan.installmentsCats)}
                                 </div>
                             )}
                         </div>
                     )}
-                    
-                    <div className="space-y-2">
-                        {plan.priceDogs && (
-                            <div>
-                                <p className="text-lg font-semibold">Cães: <span className="font-bold">{plan.priceDogs}</span></p>
-                                {plan.installmentsDogs && (
-                                    <div className="mt-1">
-                                        <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
-                                            <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
-                                            {plan.installmentsDogs}
-                                        </Badge>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                        {plan.priceCats && (
-                            <div>
-                                <p className="text-lg font-semibold">Gatos: <span className="font-bold">{plan.priceCats}</span></p>
-                                {plan.installmentsCats && (
-                                    <div className="mt-1">
-                                        <Badge variant="secondary" className="text-base font-bold bg-green-100 text-green-800 border-green-300">
-                                            <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-500" />
-                                            {plan.installmentsCats}
-                                        </Badge>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
                  </div>
                  <p className="text-sm text-muted-foreground mb-6 h-12">{plan.description}</p>
             </div>
@@ -89,12 +92,6 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                 )}
             </ul>
 
-            {plan.discountInfo && (
-                <p className="text-xs text-center text-green-700 font-semibold mb-4 bg-green-100 p-2 rounded-md">
-                    {plan.discountInfo}
-                </p>
-            )}
-
             <Button asChild variant="default" className="w-full mt-auto">
                 <Link href={whatsappUrl} target="_blank">Contratar Agora</Link>
             </Button>
@@ -115,7 +112,7 @@ export default function PlanosPage() {
             </section>
 
             <section className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
                     {staticPlans.map((plan) => (
                         <PlanCard key={plan.id} plan={plan} />
                     ))}

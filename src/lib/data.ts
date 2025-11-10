@@ -3,16 +3,15 @@
 export type Plan = {
   id: string;
   name: string;
-  price?: string;
-  priceCats?: string;
-  priceDogs?: string;
+  price?: number;
+  priceCats?: number;
+  priceDogs?: number;
   description: string;
   features: string[];
   optional?: string;
   installments?: string;
   installmentsDogs?: string;
   installmentsCats?: string;
-  discountInfo?: string;
   isMostChosen: boolean;
 };
 
@@ -21,12 +20,11 @@ export const plans: Plan[] = [
   {
     id: "essencia",
     name: "Essência",
-    priceCats: "R$ 280,00",
-    priceDogs: "R$ 450,00",
+    priceCats: 280,
+    priceDogs: 450,
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installmentsCats: "Gatos em 12x de R$ 23,34 sem juros",
-    installmentsDogs: "Cães em 12x de R$ 37,50 sem juros",
-    discountInfo: "5% de desconto em pagamento à vista!",
+    installmentsCats: "12x de R$ 23,34 sem juros",
+    installmentsDogs: "12x de R$ 37,50 sem juros",
     features: [
       "Cremação coletiva",
       "Certificado de Cremação",
@@ -37,10 +35,9 @@ export const plans: Plan[] = [
   {
     id: "harmonia",
     name: "Harmonia",
-    price: "R$ 960,00",
+    price: 960,
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installments: "Em 12x de R$ 80,00 sem juros",
-    discountInfo: "5% de desconto em pagamento à vista!",
+    installments: "12x de R$ 80,00 sem juros",
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
@@ -52,10 +49,9 @@ export const plans: Plan[] = [
   {
     id: "eternus",
     name: "Eternus",
-    price: "R$ 1.190,00",
+    price: 1190,
     description: "Indicado para famílias que desejam uma homenagem mais completa e personalizada.",
-    installments: "Em 12x de R$ 99,17 sem juros",
-    discountInfo: "5% de desconto em pagamento à vista!",
+    installments: "12x de R$ 99,17 sem juros",
     features: [
         "Cremação coletiva em compartimento separado",
         "Porta-retrato + moldura da patinha",
