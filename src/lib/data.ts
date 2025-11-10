@@ -29,7 +29,7 @@ export const plans: Plan[] = [
       "Cremação coletiva",
       "Certificado de Cremação",
     ],
-    optional: "(+R$ 98,00) Plantio de uma muda de árvore nativa ou frutífera no Memorial PET Estrela, usando as cinzas do pet.",
+    optional: "(+R$ 98,00) Plantio de uma muda de árvore nativa ou frutífera no Memorial PET Estrela. Homenageando seu PET",
     isMostChosen: false,
   },
   {
