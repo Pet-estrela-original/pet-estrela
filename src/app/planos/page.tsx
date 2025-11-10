@@ -24,34 +24,34 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
         if (!installments) return null;
         
         return (
-            <>
+            <div className="min-h-[100px] flex flex-col justify-center">
                 <p className="font-bold text-2xl md:text-3xl text-foreground">{installments}</p>
                 {price && (
                     <p className="text-xs text-muted-foreground mt-1">
                         ou {calculateDiscountedPrice(price)} à vista
                     </p>
                 )}
-            </>
+            </div>
         );
     }
 
     return (
         <Card className={cn(
-            "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent relative overflow-hidden",
-            plan.isMostChosen && "border-primary/50 mt-6"
+            "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent relative",
+            plan.isMostChosen && "border-primary/50 bg-white"
         )}>
             {plan.isMostChosen && (
-                <Badge variant="default" className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
+                <Badge variant="default" className="absolute -top-[14px] left-1/2 -translate-x-1/2 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
             )}
-            <div className="text-center z-10">
+            <div className="text-center z-10 pt-4">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
-                 <div className="relative mb-6 min-h-[100px] flex flex-col justify-center">
+                 <div className="relative mb-6">
                     <div className="absolute inset-0 -m-8 bg-gradient-to-tr from-primary/5 via-primary/10 to-transparent rounded-full blur-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
-                    <div className="z-10">
+                    <div className="z-10 relative">
                         {plan.price ? (
                              renderPriceSection(plan.price, plan.installments)
                         ) : (
-                            <div className="space-y-4">
+                            <div className="space-y-4 min-h-[100px] flex flex-col justify-center">
                                 {plan.priceDogs && plan.installmentsDogs && (
                                     <div>
                                         <h4 className="font-semibold text-lg">Cães</h4>
@@ -109,10 +109,15 @@ export default function PlanosPage() {
             </section>
 
             <section className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end">
-                    {staticPlans.map((plan) => (
-                        <PlanCard key={plan.id} plan={plan} />
-                    ))}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    {staticPlans.map((plan, index) => {
+                        const isMiddleCard = index === 1;
+                        return (
+                            <div key={plan.id} className={cn(isMiddleCard && "lg:mt-[-24px] z-10")}>
+                                <PlanCard plan={plan} />
+                            </div>
+                        )
+                    })}
                 </div>
                  <div className="mt-16 text-center">
                     <div className="inline-flex items-center gap-3 bg-white p-4 rounded-lg shadow-md border text-center">
