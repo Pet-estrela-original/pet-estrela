@@ -27,9 +27,9 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
 
         return (
              <div className="mb-4 text-center">
-                <p className="font-bold text-2xl">{installmentsText}</p>
+                <p className="font-bold text-2xl md:text-3xl text-foreground">{installmentsText}</p>
                 {originalPrice &&
-                    <p className="text-sm font-semibold mt-2">
+                    <p className="text-xs text-muted-foreground mt-1">
                         ou {calculateDiscountedPrice(originalPrice)} à vista
                     </p>
                 }
