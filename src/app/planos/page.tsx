@@ -21,14 +21,16 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
     }
 
     const renderPriceSection = (price?: number, installments?: string) => {
-        if (!price || !installments) return null;
+        if (!installments) return null;
         
         return (
             <>
                 <p className="font-bold text-2xl md:text-3xl text-foreground">{installments}</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                    ou {calculateDiscountedPrice(price)} à vista
-                </p>
+                {price && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                        ou {calculateDiscountedPrice(price)} à vista
+                    </p>
+                )}
             </>
         );
     }
@@ -36,10 +38,10 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
     return (
         <Card className={cn(
             "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent relative overflow-hidden",
-            plan.isMostChosen && "border-primary/50"
+            plan.isMostChosen && "border-primary/50 mt-6"
         )}>
             {plan.isMostChosen && (
-                <Badge variant="default" className="absolute top-4 right-4 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
+                <Badge variant="default" className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
             )}
             <div className="text-center z-10">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
@@ -107,7 +109,7 @@ export default function PlanosPage() {
             </section>
 
             <section className="container mx-auto max-w-7xl px-4 py-16 md:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end">
                     {staticPlans.map((plan) => (
                         <PlanCard key={plan.id} plan={plan} />
                     ))}
