@@ -23,57 +23,58 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
     const calculateDiscountedPrice = (price: number) => formatCurrency(price * 0.95);
 
     const renderPriceSection = (originalPrice?: number, installmentsText?: string) => {
-        if (!installmentsText) return null;
+        if (!originalPrice || !installmentsText) return null;
 
         return (
              <div className="mb-4 text-center">
                 <p className="font-bold text-2xl md:text-3xl text-foreground">{installmentsText}</p>
-                {originalPrice &&
-                    <p className="text-xs text-muted-foreground mt-1">
-                        ou {calculateDiscountedPrice(originalPrice)} à vista
-                    </p>
-                }
+                <p className="text-xs text-muted-foreground mt-1">
+                    ou {calculateDiscountedPrice(originalPrice)} à vista
+                </p>
             </div>
         );
     }
 
     return (
         <Card className={cn(
-            "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent",
+            "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent relative overflow-hidden",
             plan.isMostChosen && "border-primary/50"
         )}>
             {plan.isMostChosen && (
-                <Badge variant="default" className="absolute -top-3 right-5 bg-accent text-accent-foreground z-10">Mais Escolhido</Badge>
+                <Badge variant="default" className="absolute -top-3 right-5 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
             )}
-            <div className="text-center">
+            <div className="text-center z-10">
                  <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
-                 <div className="mb-6 min-h-[100px] flex flex-col justify-center">
-                    {plan.price ? (
-                         renderPriceSection(plan.price, plan.installments)
-                    ) : (
-                        <div className="space-y-4">
-                            {plan.priceDogs && plan.installmentsDogs && (
-                                <div>
-                                    <h4 className="font-semibold text-lg">Cães</h4>
-                                    {renderPriceSection(plan.priceDogs, plan.installmentsDogs)}
-                                </div>
-                            )}
-                             {plan.priceDogs && plan.priceCats && <Separator className="my-2"/>}
-                            {plan.priceCats && plan.installmentsCats && (
-                                <div>
-                                    <h4 className="font-semibold text-lg">Gatos</h4>
-                                    {renderPriceSection(plan.priceCats, plan.installmentsCats)}
-                                </div>
-                            )}
-                        </div>
-                    )}
+                 <div className="relative mb-6 min-h-[100px] flex flex-col justify-center">
+                    <div className="absolute inset-0 -m-8 bg-gradient-to-tr from-primary/5 via-primary/10 to-transparent rounded-full blur-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                    <div className="z-10">
+                        {plan.price ? (
+                             renderPriceSection(plan.price, plan.installments)
+                        ) : (
+                            <div className="space-y-4">
+                                {plan.priceDogs && plan.installmentsDogs && (
+                                    <div>
+                                        <h4 className="font-semibold text-lg">Cães</h4>
+                                        {renderPriceSection(plan.priceDogs, plan.installmentsDogs)}
+                                    </div>
+                                )}
+                                 {plan.priceDogs && plan.priceCats && <Separator className="my-2"/>}
+                                {plan.priceCats && plan.installmentsCats && (
+                                    <div>
+                                        <h4 className="font-semibold text-lg">Gatos</h4>
+                                        {renderPriceSection(plan.priceCats, plan.installmentsCats)}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                  </div>
                  <p className="text-sm text-muted-foreground mb-6 h-12">{plan.description}</p>
             </div>
             
-            <Separator className="mb-6" />
+            <Separator className="mb-6 z-10" />
 
-            <ul className="space-y-3 text-sm text-foreground/90 mb-6 flex-grow">
+            <ul className="space-y-3 text-sm text-foreground/90 mb-6 flex-grow z-10">
                 {plan.features.map((feature, fIndex) => (
                     <li key={fIndex} className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
@@ -88,7 +89,7 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                 )}
             </ul>
 
-            <Button asChild variant="default" className="w-full mt-auto">
+            <Button asChild variant="default" className="w-full mt-auto z-10">
                 <Link href={whatsappUrl} target="_blank">Contratar Agora</Link>
             </Button>
         </Card>
