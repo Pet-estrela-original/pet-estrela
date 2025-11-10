@@ -20,79 +20,82 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
         return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price * 0.95);
     }
 
-    const renderPriceSection = (price?: number, installments?: string) => {
-        if (!installments) return null;
-        
-        return (
-            <div className="min-h-[100px] flex flex-col justify-center">
-                <p className="font-bold text-2xl md:text-3xl text-foreground">{installments}</p>
-                {price && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                        ou {calculateDiscountedPrice(price)} à vista
-                    </p>
-                )}
-            </div>
-        );
-    }
-
     return (
         <Card className={cn(
-            "rounded-lg shadow-xl p-6 md:p-8 flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 hover:border-primary/50 border-2 border-transparent relative",
+            "rounded-lg shadow-xl flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 border-2 border-transparent relative overflow-hidden",
             plan.isMostChosen && "border-primary/50 bg-white"
         )}>
+             <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+
             {plan.isMostChosen && (
                 <Badge variant="default" className="absolute -top-[14px] left-1/2 -translate-x-1/2 bg-accent text-accent-foreground z-20">Mais Escolhido</Badge>
             )}
-            <div className="text-center z-10 pt-4">
-                 <h3 className="font-headline text-3xl text-primary mb-2">{plan.name}</h3>
-                 <div className="relative mb-6">
-                    <div className="absolute inset-0 -m-8 bg-gradient-to-tr from-primary/5 via-primary/10 to-transparent rounded-full blur-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
-                    <div className="z-10 relative">
-                        {plan.price ? (
-                             renderPriceSection(plan.price, plan.installments)
-                        ) : (
-                            <div className="space-y-4 min-h-[100px] flex flex-col justify-center">
-                                {plan.priceDogs && plan.installmentsDogs && (
-                                    <div>
+            <div className="text-center z-10 pt-8 relative">
+                 <div className="absolute inset-0 -m-8 bg-gradient-to-tr from-primary/5 via-primary/10 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                 <h3 className="font-headline text-3xl text-primary mb-2 relative z-10">{plan.name}</h3>
+                 
+                 <div className="relative z-10">
+                    <div className="min-h-[100px] flex flex-col justify-center px-4">
+                        {plan.installments && (
+                            <div>
+                                <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installments}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    ou {calculateDiscountedPrice(plan.price!)} à vista
+                                </p>
+                            </div>
+                        )}
+                        
+                        {(plan.installmentsDogs || plan.installmentsCats) && (
+                            <div className="space-y-4">
+                                {plan.installmentsDogs && plan.priceDogs && (
+                                     <div>
                                         <h4 className="font-semibold text-lg">Cães</h4>
-                                        {renderPriceSection(plan.priceDogs, plan.installmentsDogs)}
+                                        <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installmentsDogs}</p>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            ou {calculateDiscountedPrice(plan.priceDogs)} à vista
+                                        </p>
                                     </div>
                                 )}
-                                 {plan.priceDogs && plan.priceCats && <Separator className="my-2"/>}
-                                {plan.priceCats && plan.installmentsCats && (
+                                {plan.installmentsDogs && plan.installmentsCats && <Separator className="my-2" />}
+                                {plan.installmentsCats && plan.priceCats && (
                                     <div>
                                         <h4 className="font-semibold text-lg">Gatos</h4>
-                                        {renderPriceSection(plan.priceCats, plan.installmentsCats)}
+                                        <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installmentsCats}</p>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            ou {calculateDiscountedPrice(plan.priceCats)} à vista
+                                        </p>
                                     </div>
-
                                 )}
                             </div>
                         )}
                     </div>
                  </div>
-                 <p className="text-sm text-muted-foreground mb-6 h-12">{plan.description}</p>
+                 <p className="text-sm text-muted-foreground mb-6 h-12 px-4 relative z-10">{plan.description}</p>
             </div>
             
             <Separator className="mb-6 z-10" />
 
-            <ul className="space-y-3 text-sm text-foreground/90 mb-6 flex-grow z-10">
-                {plan.features.map((feature, fIndex) => (
-                    <li key={fIndex} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
-                        <span>{feature}</span>
-                    </li>
-                ))}
-                {plan.optional && (
-                    <li className="flex items-start gap-3 text-muted-foreground mt-4 pt-4 border-t">
-                        <PawPrint className="w-5 h-5 text-primary mt-0.5 shrink-0" />
-                        <span>{plan.optional}</span>
-                    </li>
-                )}
-            </ul>
+            <div className="p-6 pt-0 flex flex-col flex-grow z-10">
+                <ul className="space-y-3 text-sm text-foreground/90 mb-6 flex-grow">
+                    {plan.features.map((feature, fIndex) => (
+                        <li key={fIndex} className="flex items-start gap-3">
+                            <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
+                            <span>{feature}</span>
+                        </li>
+                    ))}
+                    {plan.optional && (
+                        <li className="flex items-start gap-3 text-muted-foreground mt-4 pt-4 border-t">
+                            <PawPrint className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                            <span>{plan.optional}</span>
+                        </li>
+                    )}
+                </ul>
 
-            <Button asChild variant="default" className="w-full mt-auto z-10">
-                <Link href={whatsappUrl} target="_blank">Contratar Agora</Link>
-            </Button>
+                <Button asChild variant="default" className="w-full mt-auto">
+                    <Link href={whatsappUrl} target="_blank">Contratar Agora</Link>
+                </Button>
+            </div>
         </Card>
     )
 };
