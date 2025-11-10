@@ -23,20 +23,22 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
     const calculateDiscountedPrice = (price: number) => formatCurrency(price * 0.95);
 
     const renderPriceSection = (originalPrice?: number, installmentsText?: string) => {
-        if (!originalPrice || !installmentsText) return null;
+        if (!installmentsText) return null;
 
         const [installments, value] = installmentsText.split(' de ');
 
         return (
-             <div className="mb-4">
+             <div className="mb-4 text-center">
                 <div className="flex justify-center items-baseline gap-2">
                     <span className="font-bold text-4xl">{value}</span>
                     <span className="text-xl text-muted-foreground">/mês</span>
                 </div>
                  <p className="text-sm text-muted-foreground">{`no plano de ${installments}`}</p>
-                <p className="text-sm font-semibold mt-2">
-                    ou {calculateDiscountedPrice(originalPrice)} à vista
-                </p>
+                {originalPrice &&
+                    <p className="text-sm font-semibold mt-2">
+                        ou {calculateDiscountedPrice(originalPrice)} à vista
+                    </p>
+                }
             </div>
         );
     }
@@ -56,14 +58,14 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                          renderPriceSection(plan.price, plan.installments)
                     ) : (
                         <div className="space-y-4">
-                            {plan.priceDogs && (
+                            {plan.priceDogs && plan.installmentsDogs && (
                                 <div>
                                     <h4 className="font-semibold text-lg">Cães</h4>
                                     {renderPriceSection(plan.priceDogs, plan.installmentsDogs)}
                                 </div>
                             )}
-                             {plan.priceDogs && plan.priceCats && <Separator />}
-                            {plan.priceCats && (
+                             {plan.priceDogs && plan.priceCats && <Separator className="my-2"/>}
+                            {plan.priceCats && plan.installmentsCats && (
                                 <div>
                                     <h4 className="font-semibold text-lg">Gatos</h4>
                                     {renderPriceSection(plan.priceCats, plan.installmentsCats)}
