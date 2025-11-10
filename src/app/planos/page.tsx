@@ -22,7 +22,7 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
 
     return (
         <Card className={cn(
-            "rounded-lg shadow-xl flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 border-2 border-transparent relative overflow-hidden",
+            "rounded-lg shadow-xl flex flex-col h-full transition-all duration-300 group hover:shadow-primary/20 hover:-translate-y-2 border-2 border-transparent relative",
             plan.isMostChosen && "border-primary/50 bg-white"
         )}>
              <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
@@ -117,7 +117,7 @@ export default function PlanosPage() {
                     {staticPlans.map((plan, index) => {
                         const isMiddleCard = index === 1;
                         return (
-                            <div key={plan.id} className={cn(isMiddleCard && "lg:mt-[-24px] z-10")}>
+                            <div key={plan.id} className={cn(isMiddleCard && "lg:pt-0 lg:-mt-6")}>
                                 <PlanCard plan={plan} />
                             </div>
                         )
