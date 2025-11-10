@@ -25,15 +25,9 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
     const renderPriceSection = (originalPrice?: number, installmentsText?: string) => {
         if (!installmentsText) return null;
 
-        const [installments, value] = installmentsText.split(' de ');
-
         return (
              <div className="mb-4 text-center">
-                <div className="flex justify-center items-baseline gap-2">
-                    <span className="font-bold text-4xl">{value}</span>
-                    <span className="text-xl text-muted-foreground">/mês</span>
-                </div>
-                 <p className="text-sm text-muted-foreground">{`no plano de ${installments}`}</p>
+                <p className="font-bold text-2xl">{installmentsText}</p>
                 {originalPrice &&
                     <p className="text-sm font-semibold mt-2">
                         ou {calculateDiscountedPrice(originalPrice)} à vista
