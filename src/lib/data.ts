@@ -55,12 +55,13 @@ export const plans: Plan[] = [
     description: "Indicado para famílias que desejam uma homenagem mais completa e personalizada.",
     installments: "12x de R$ 99,17 sem juros",
     features: [
-        "Cremação coletiva em compartimento separado",
-        "Porta-retrato + moldura da patinha",
-        "Certificado de Cremação",
-        "Urna biodegradável entregue em casa ou plantio de árvore no Memorial PET Estrela",
-        "Cartinha personalizada com foto do pet",
-        "Preparação para velório simples"
+      "Cremação coletiva em compartimento separado",
+      "Porta-retrato + moldura da patinha",
+      "Certidão de cremação",
+      "Urna biodegradável entregue em casa ou plantio de árvore 🌱 no Memorial PET Estrela",
+      "Vidrinho com os pelinhos do animal",
+      "Preparação para velório simples",
+      "Remoção 24h até 50km"
     ],
     isMostChosen: false,
   },
