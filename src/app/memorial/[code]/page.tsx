@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -253,10 +252,10 @@ const PetProfilePage = () => {
                             {pageUrl && (
                                 <div className="p-2 border rounded-lg bg-white">
                                     <Image
-                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pageUrl)}`}
+                                        src={`https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=${encodeURIComponent(pageUrl)}`}
                                         alt={`QR Code para o memorial de ${selectedPet.name}`}
-                                        width={150}
-                                        height={150}
+                                        width={450}
+                                        height={450}
                                     />
                                 </div>
                             )}
