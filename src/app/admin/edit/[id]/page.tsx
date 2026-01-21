@@ -182,15 +182,14 @@ const EditPetPage = () => {
                 }
             }
             
-            const processedData: Omit<PetFormValues, 'images'> & { [key: string]: any } = {
-                ...data,
+            const { images, ...restOfData } = data;
+            const processedData = {
+                ...restOfData,
                 birthDate: data.birthDate ? new Date(data.birthDate) : null,
                 cremationDate: data.cremationDate ? new Date(data.cremationDate) : null,
                 imageUrls: imageUrls || [],
                 updatedAt: serverTimestamp(),
             };
-            
-            delete processedData.images;
             
             if (isNew) {
                 const newData = { ...processedData, createdAt: serverTimestamp(), ownerId: user.uid };
