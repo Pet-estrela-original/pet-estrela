@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useFirebase, useMemoFirebase } from '@/firebase/provider';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection, query } from 'firebase/firestore';
+import { collection, query, where, orderBy } from 'firebase/firestore';
 
 type PetProfile = {
   id: string;
@@ -72,8 +72,27 @@ export default function MemorialPage() {
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
-        return query(collection(firestore, 'pet_memorial_profiles'));
-    }, [firestore]);
+
+        const [sortField, sortDirection] = sortOrder.split('_');
+        const firestoreSortField = sortField === 'protocol' ? 'memorialCode' : sortField;
+
+        const q = collection(firestore, 'pet_memorial_profiles');
+        
+        const constraints = [];
+
+        // Otimização: Filtrar por tipo de animal no servidor
+        if (animalFilter !== 'all') {
+            constraints.push(where('animalType', '==', animalFilter));
+        }
+
+        // Otimização: Ordenar no servidor
+        if (firestoreSortField && sortDirection) {
+            constraints.push(orderBy(firestoreSortField, sortDirection as 'asc' | 'desc'));
+        }
+
+        return query(q, ...constraints);
+    }, [firestore, animalFilter, sortOrder]);
+
 
     const { data: pets, isLoading } = useCollection<PetProfile>(petProfilesQuery);
 
@@ -103,68 +122,27 @@ export default function MemorialPage() {
 
     const filteredAndSortedPets = React.useMemo(() => {
         if (!pets) return [];
-        return pets
-            .filter(pet => {
-                if (!pet || !pet.name || !pet.memorialCode) return false;
+        
+        if (!searchTerm) {
+            return pets; // Os dados já estão filtrados e ordenados pelo Firestore
+        }
 
-                const searchTermLower = searchTerm.toLowerCase();
-                const cremationDate = formatDate(pet.cremationDate);
+        // A busca por texto continua no cliente, mas em uma lista de dados menor
+        return pets.filter(pet => {
+            if (!pet || !pet.name || !pet.memorialCode) return false;
 
-                const matchesSearch = 
-                    pet.name.toLowerCase().includes(searchTermLower) ||
-                    pet.memorialCode.toLowerCase().includes(searchTermLower) ||
-                    (pet.breed && pet.breed.toLowerCase().includes(searchTermLower)) ||
-                    (pet.tutors && pet.tutors.toLowerCase().includes(searchTermLower)) ||
-                    (cremationDate && cremationDate.toLowerCase().includes(searchTermLower));
+            const searchTermLower = searchTerm.toLowerCase();
+            const cremationDate = formatDate(pet.cremationDate);
 
-                const matchesAnimal = animalFilter === 'all' || (pet.animalType && pet.animalType.toLowerCase().startsWith(animalFilter.toLowerCase()));
-                
-                return matchesSearch && matchesAnimal;
-            })
-            .sort((a, b) => {
-                 // Ensure 'a' and 'b' and their names are valid before comparing
-                if (!a?.name || !b?.name) return 0;
-
-                if (sortOrder === 'name_asc') {
-                    return a.name.localeCompare(b.name);
-                }
-                if (sortOrder === 'name_desc') {
-                    return b.name.localeCompare(a.name);
-                }
-
-                if(sortOrder.includes('protocol')) {
-                    // Ensure 'a' and 'b' and their memorialCodes are valid before comparing
-                    if (!a?.memorialCode || !b?.memorialCode) return 0;
-                    const numA = parseInt(a.memorialCode.replace('#', ''), 10) || 0;
-                    const numB = parseInt(b.memorialCode.replace('#', ''), 10) || 0;
-                    if(sortOrder === 'protocol_asc') return numA - numB;
-                    return numB - numA;
-                }
-                
-                try {
-                    const dateAValue = a.cremationDate;
-                    const dateBValue = b.cremationDate;
-
-                    if (!dateAValue || !dateBValue) return 0;
-
-                    const dateA = (typeof dateAValue === 'string' ? new Date(dateAValue) : dateAValue.toDate()).getTime();
-                    const dateB = (typeof dateBValue === 'string' ? new Date(dateBValue) : dateBValue.toDate()).getTime();
-                    
-                     if (isNaN(dateA) || isNaN(dateB)) return 0;
-                    
-                     if (sortOrder === 'cremationDate_asc') {
-                        return dateA - dateB;
-                    }
-                    if (sortOrder === 'cremationDate_desc') {
-                       return dateB - dateA; 
-                    }
-                } catch(e) {
-                    console.error("Error parsing date for sorting:", e);
-                    return 0; 
-                }
-                return 0; // Default return if no sort condition is met
-            });
-    }, [pets, searchTerm, animalFilter, sortOrder, formatDate]);
+            return (
+                pet.name.toLowerCase().includes(searchTermLower) ||
+                pet.memorialCode.toLowerCase().includes(searchTermLower) ||
+                (pet.breed && pet.breed.toLowerCase().includes(searchTermLower)) ||
+                (pet.tutors && pet.tutors.toLowerCase().includes(searchTermLower)) ||
+                (cremationDate && cremationDate.toLowerCase().includes(searchTermLower))
+            );
+        });
+    }, [pets, searchTerm, formatDate]);
     
     const showLoadingSkeleton = !isClient || isLoading;
     const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
