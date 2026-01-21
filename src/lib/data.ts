@@ -41,8 +41,10 @@ export const plans: Plan[] = [
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
-      "Certificado de Cremação",
-      "Plantio de árvore no Memorial PET Estrela com QR Code exclusivo",
+      "Certidão de cremação",
+      "Plantio de árvore 🌱 no Memorial PET Estrela com QR Code exclusivo",
+      "Vidrinho com os pelinhos do animal",
+      "remoção 24h até 50km",
     ],
     isMostChosen: true,
   },
