@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -16,8 +15,8 @@ const whatsappUrl = "https://wa.me/551142405253?text=Olá!%20Tudo%20bem?%20Gosta
 
 const PlanCard = ({ plan }: { plan: Plan }) => {
     
-    const calculateDiscountedPrice = (price: number) => {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price * 0.95);
+    const formatPrice = (price: number) => {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
     }
 
     return (
@@ -37,34 +36,25 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                  
                  <div className="relative z-10">
                     <div className="min-h-[100px] flex flex-col justify-center px-4">
-                        {plan.installments && (
+                        {plan.price && (
                             <div>
-                                <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installments}</p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    ou {calculateDiscountedPrice(plan.price!)} à vista
-                                </p>
+                                <p className="font-bold text-4xl text-foreground">{formatPrice(plan.price)}</p>
                             </div>
                         )}
                         
-                        {(plan.installmentsDogs || plan.installmentsCats) && (
+                        {(plan.priceDogs || plan.priceCats) && (
                             <div className="space-y-4">
-                                {plan.installmentsDogs && plan.priceDogs && (
+                                {plan.priceDogs && (
                                      <div>
                                         <h4 className="font-semibold text-lg">Cães</h4>
-                                        <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installmentsDogs}</p>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            ou {calculateDiscountedPrice(plan.priceDogs)} à vista
-                                        </p>
+                                        <p className="font-bold text-4xl text-foreground">{formatPrice(plan.priceDogs)}</p>
                                     </div>
                                 )}
-                                {plan.installmentsDogs && plan.installmentsCats && <Separator className="my-2" />}
-                                {plan.installmentsCats && plan.priceCats && (
+                                {plan.priceDogs && plan.priceCats && <Separator className="my-2" />}
+                                {plan.priceCats && (
                                     <div>
                                         <h4 className="font-semibold text-lg">Gatos</h4>
-                                        <p className="font-bold text-2xl md:text-3xl text-foreground">{plan.installmentsCats}</p>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            ou {calculateDiscountedPrice(plan.priceCats)} à vista
-                                        </p>
+                                        <p className="font-bold text-4xl text-foreground">{formatPrice(plan.priceCats)}</p>
                                     </div>
                                 )}
                             </div>

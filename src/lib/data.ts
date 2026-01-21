@@ -9,9 +9,6 @@ export type Plan = {
   description: string;
   features: string[];
   optional?: string;
-  installments?: string;
-  installmentsDogs?: string;
-  installmentsCats?: string;
   isMostChosen: boolean;
 };
 
@@ -23,8 +20,6 @@ export const plans: Plan[] = [
     priceCats: 280,
     priceDogs: 450,
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installmentsCats: "12x de R$ 23,34 sem juros",
-    installmentsDogs: "12x de R$ 37,50 sem juros",
     features: [
       "Cremação coletiva",
       "Certificado de Cremação",
@@ -37,7 +32,6 @@ export const plans: Plan[] = [
     name: "Harmonia",
     price: 960,
     description: "Ideal para famílias que desejam uma homenagem simbólica e ecológica.",
-    installments: "12x de R$ 80,00 sem juros",
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
@@ -53,7 +47,6 @@ export const plans: Plan[] = [
     name: "Eternus",
     price: 1190,
     description: "Indicado para famílias que desejam uma homenagem mais completa e personalizada.",
-    installments: "12x de R$ 99,17 sem juros",
     features: [
       "Cremação coletiva em compartimento separado",
       "Porta-retrato + moldura da patinha",
