@@ -38,6 +38,7 @@ export default function RootLayout({
             <Toaster />
           </FirebaseProvider>
       </body>
+      {/* V2.8.2 */}
     </html>
   );
 }
