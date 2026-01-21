@@ -61,6 +61,7 @@ const MediaItem = ({ src, alt }: { src: string, alt: string }) => {
 
 export default function MemorialPage() {
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = React.useState('');
     const [animalFilter, setAnimalFilter] = React.useState('all');
     const [sortOrder, setSortOrder] = React.useState('protocol_desc');
     const { firestore } = useFirebase();
@@ -69,6 +70,16 @@ export default function MemorialPage() {
     React.useEffect(() => {
         setIsClient(true);
     }, []);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchTerm]);
 
     const petProfilesQuery = useMemoFirebase(() => {
         if (!firestore) return null;
@@ -123,7 +134,7 @@ export default function MemorialPage() {
     const filteredAndSortedPets = React.useMemo(() => {
         if (!pets) return [];
         
-        if (!searchTerm) {
+        if (!debouncedSearchTerm) {
             return pets; // Os dados já estão filtrados e ordenados pelo Firestore
         }
 
@@ -131,7 +142,7 @@ export default function MemorialPage() {
         return pets.filter(pet => {
             if (!pet || !pet.name || !pet.memorialCode) return false;
 
-            const searchTermLower = searchTerm.toLowerCase();
+            const searchTermLower = debouncedSearchTerm.toLowerCase();
             const cremationDate = formatDate(pet.cremationDate);
 
             return (
@@ -142,7 +153,7 @@ export default function MemorialPage() {
                 (cremationDate && cremationDate.toLowerCase().includes(searchTermLower))
             );
         });
-    }, [pets, searchTerm, formatDate]);
+    }, [pets, debouncedSearchTerm, formatDate]);
     
     const showLoadingSkeleton = !isClient || isLoading;
     const showNoResults = !showLoadingSkeleton && filteredAndSortedPets.length === 0;
