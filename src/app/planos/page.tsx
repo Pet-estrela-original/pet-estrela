@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,12 +13,14 @@ import { cn } from "@/lib/utils";
 
 const whatsappUrl = "https://wa.me/551142405253?text=Olá!%20Tudo%20bem?%20Gostaria%20de%20ser%20atendido%20e%20saber%20mais";
 
+const PriceBlock = ({ installmentText, fullPriceText }: { installmentText: string; fullPriceText: string }) => (
+    <div>
+        <h3 className="font-bold text-3xl text-foreground leading-tight">{installmentText}</h3>
+        <small className="text-muted-foreground">{fullPriceText}</small>
+    </div>
+);
 
 const PlanCard = ({ plan }: { plan: Plan }) => {
-    
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
-    }
 
     return (
         <Card className={cn(
@@ -36,29 +39,27 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                  
                  <div className="relative z-10">
                     <div className="min-h-[100px] flex flex-col justify-center px-4">
-                        {plan.price && (
-                            <div>
-                                <p className="font-bold text-4xl text-foreground">{formatPrice(plan.price)}</p>
-                            </div>
-                        )}
-                        
-                        {(plan.priceDogs || plan.priceCats) && (
+                        {plan.id === 'essencia' ? (
                             <div className="space-y-4">
                                 {plan.priceDogs && (
                                      <div>
                                         <h4 className="font-semibold text-lg">Cães</h4>
-                                        <p className="font-bold text-4xl text-foreground">{formatPrice(plan.priceDogs)}</p>
+                                        <PriceBlock installmentText="12x de R$ 37,50 sem juros" fullPriceText="ou R$ 427,50 à vista" />
                                     </div>
                                 )}
                                 {plan.priceDogs && plan.priceCats && <Separator className="my-2" />}
                                 {plan.priceCats && (
                                     <div>
                                         <h4 className="font-semibold text-lg">Gatos</h4>
-                                        <p className="font-bold text-4xl text-foreground">{formatPrice(plan.priceCats)}</p>
+                                        <PriceBlock installmentText="12x de R$ 23,34 sem juros" fullPriceText="ou R$ 266,00 à vista" />
                                     </div>
                                 )}
                             </div>
-                        )}
+                        ) : plan.id === 'harmonia' ? (
+                            <PriceBlock installmentText="12x de R$ 80,00 sem juros" fullPriceText="ou R$ 912,00 à vista" />
+                        ) : plan.id === 'eternus' ? (
+                            <PriceBlock installmentText="12x de R$ 99,17 sem juros" fullPriceText="ou R$ 1.130,50 à vista" />
+                        ) : null}
                     </div>
                  </div>
                  <p className="text-sm text-muted-foreground mb-6 h-12 px-4 relative z-10">{plan.description}</p>
