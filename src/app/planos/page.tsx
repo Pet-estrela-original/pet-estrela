@@ -44,21 +44,21 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
                                 {plan.priceDogs && (
                                      <div>
                                         <h4 className="font-semibold text-lg">Cães</h4>
-                                        <PriceBlock installmentText="12x de R$ 37,50 sem juros" fullPriceText="ou R$ 427,50 à vista" />
+                                        <PriceBlock installmentText="12x de R$ 37,50 sem juros" fullPriceText="ou R$ 450,00 à vista" />
                                     </div>
                                 )}
                                 {plan.priceDogs && plan.priceCats && <Separator className="my-2" />}
                                 {plan.priceCats && (
                                     <div>
                                         <h4 className="font-semibold text-lg">Gatos</h4>
-                                        <PriceBlock installmentText="12x de R$ 23,34 sem juros" fullPriceText="ou R$ 266,00 à vista" />
+                                        <PriceBlock installmentText="12x de R$ 23,34 sem juros" fullPriceText="ou R$ 280,00 à vista" />
                                     </div>
                                 )}
                             </div>
                         ) : plan.id === 'harmonia' ? (
-                            <PriceBlock installmentText="12x de R$ 80,00 sem juros" fullPriceText="ou R$ 912,00 à vista" />
+                            <PriceBlock installmentText="12x de R$ 80,00 sem juros" fullPriceText="ou R$ 960,00 à vista" />
                         ) : plan.id === 'eternus' ? (
-                            <PriceBlock installmentText="12x de R$ 99,17 sem juros" fullPriceText="ou R$ 1.130,50 à vista" />
+                            <PriceBlock installmentText="12x de R$ 99,17 sem juros" fullPriceText="ou R$ 1.190,00 à vista" />
                         ) : null}
                     </div>
                  </div>
